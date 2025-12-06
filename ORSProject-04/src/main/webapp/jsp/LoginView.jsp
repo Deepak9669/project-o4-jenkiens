@@ -31,7 +31,7 @@
 
 			<table>
 				<tr>
-					<th>Login Id:</th>
+					<th>Login Id123:</th>
 					<td><input type="text" name="login"
 					value="<%=DataUtility.getStringData(bean.getLogin()) %>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
