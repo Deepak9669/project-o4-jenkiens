@@ -31,16 +31,18 @@
 
 			<table>
 				<tr>
-					<th>Login Id123:</th>
+					<th>Login Id:</th>
 					<td><input type="text" name="login"
-					value="<%=DataUtility.getStringData(bean.getLogin()) %>"></td>
+						placeholder="Enter Login Id"
+						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
 
 				</tr>
 				<tr>
 					<th>password</th>
-					<td><input type="text" name="password"
-					value="<%=DataUtility.getStringData(bean.getPassword()) %>"></td>
+					<td><input type="password" name="password"
+						placeholder="Enter Password"
+						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
 				</tr>
 
@@ -48,14 +50,15 @@
 					<th></th>
 
 					<td><input type="submit" name="operation"
-						value="<%=LoginCtl.OP_SIGN_IN%>">
-						<input type="submit" name="operation"
-						value="<%=LoginCtl.OP_SIGN_UP%>"></td>
+						value="<%=LoginCtl.OP_SIGN_IN%>"> <input type="submit"
+						name="operation" value="<%=LoginCtl.OP_SIGN_UP%>"></td>
 
 				</tr>
 
 
 			</table>
+			<a href="<%=ORSView.FORGET_PASSWORD_CTL%>"><b>Forget My Password
+			</b></a>
 		</div>
 	</form>
 	<%@ include file="Footer.jsp"%>

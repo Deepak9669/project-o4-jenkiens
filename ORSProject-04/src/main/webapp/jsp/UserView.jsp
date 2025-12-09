@@ -25,7 +25,7 @@
 		%>
 
 		<div align="center">
-			<h1 align="center" style="margin-bottom: -15; color: navy">
+			<h1 align="center" style="margin-bottom: -10; color: navy">
 				<%
 					if (bean != null && bean.getId() > 0) {
 				%>Update<%
@@ -36,7 +36,7 @@
 				User
 			</h1>
 
-			<div style="height: 15px; margin-bottom: 12px">
+			<div style="height: 12px; margin-bottom: 5px">
 				<H3 align="center">
 					<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 					</font>

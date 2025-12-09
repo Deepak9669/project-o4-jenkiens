@@ -38,14 +38,12 @@
 	</h3>
 
 	<a href="<%=ORSView.MY_PROFILE_CTL %>"><b>MyProfile </b></a>
-		<b>|</b>
+    <b>|</b> 
 	<a href="<%=ORSView.MARKSHEET_MERIT_LIST_CTL %>"><b>MarksheetMeritList </b></a>
 	<b>|</b>
 	<a href="<%=ORSView.GET_MARKSHEET_CTL %>"><b>GetMarksheet </b></a>
 	<b>|</b>
 	<a href="<%=ORSView.CHANGE_PASSWORD_CTL %>"><b>ChangePassword </b></a>
-	<b>|</b>
-	<a href="<%=ORSView.FORGET_PASSWORD_CTL %>"><b>ForgetPassword </b></a>
 	<b>|</b>
 	<a href="<%=ORSView.USER_CTL %>"><b>Add User</b></a>
 	<b>|</b>
@@ -83,14 +81,10 @@
 	<b>|</b>
 	<a href="<%=ORSView.TIMETABLE_LIST_CTL %>"><b>Timetable List</b></a>
 	<b>|</b>
-<b>|</b>
 	<a href=<%=ORSView.JAVA_DOC%> target="blank"><b>Java Doc</b></a>
 	<b>|</b>
 	<a href="<%=ORSView.LOGIN_CTL %>?operation<%=LoginCtl.OP_LOG_OUT%>"><b>Logout</b></a>
-	<b>|</b>
-	<a href="<%=ORSView.USER1_CTL %>"><b>Add User1</b></a>
-	<b>|</b>
-	<a href="<%=ORSView.USER1_LIST_CTL %>"><b>User1 List</b></a>
+	
 	<%
 		} else {
 	%>

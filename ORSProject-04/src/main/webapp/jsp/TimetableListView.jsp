@@ -55,7 +55,7 @@
 					<td align="right"><label><b>Course Name :</b></label> <%=HTMLUtility.getList("courseId", String.valueOf(bean.getCourseId()), courseList)%>&emsp;
 						<label><b>Subject Name :</b></label> <%=HTMLUtility.getList("subjectId", String.valueOf(bean.getSubjectId()), subjectList)%>&emsp;
 						<label><b>Exam Date :</b></label></td>
-					<td align="left"><input type="text" id="udate" name="examDate" placeholder="Select Date of Birth"
+					<td align="left"><input type="text" id="udatee" name="examDate" placeholder="Select Date of exam"
 						value="<%=DataUtility.getDateString(bean.getExamDate())%>">
 				</label>&emsp; <input type="submit" name="operation"
 					value="<%=TimetableListCtl.OP_SEARCH%>">&nbsp; <input

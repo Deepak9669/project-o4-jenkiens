@@ -58,8 +58,8 @@ public class FrontController implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession();
+        
         String uri = request.getRequestURI();
-
         request.setAttribute("uri", uri);
 
         // Check if user session exists
