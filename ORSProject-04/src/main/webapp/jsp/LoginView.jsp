@@ -39,12 +39,22 @@
 				<tr>
 					<th>Login ID:</th>
 					<td><input type="text" name="login"
+<<<<<<< HEAD
+=======
+						placeholder="Enter Login Id"
+>>>>>>> 0599c2f98a21eb7768c7978da9cc40c2d9f08c76
 						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
 				</tr>
 				<tr>
+<<<<<<< HEAD
 					<th>Password:</th>
 					<td><input type="text" name="password"
+=======
+					<th>password</th>
+					<td><input type="password" name="password"
+						placeholder="Enter Password"
+>>>>>>> 0599c2f98a21eb7768c7978da9cc40c2d9f08c76
 						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
 				</tr>
@@ -56,13 +66,23 @@
 				</tr>
 				<tr>
 					<th></th>
+<<<<<<< HEAD
 					<td></td>
 				</tr>
 				<tr>
 					<th></th>
 					<td><a href="<%=ORSView.FORGET_PASSWORD_CTL%>"><b>Forget my password?</b></a>&nbsp;</td>
+=======
+
+					<td><input type="submit" name="operation"
+						value="<%=LoginCtl.OP_SIGN_IN%>"> <input type="submit"
+						name="operation" value="<%=LoginCtl.OP_SIGN_UP%>"></td>
+
+>>>>>>> 0599c2f98a21eb7768c7978da9cc40c2d9f08c76
 				</tr>
 			</table>
+			<a href="<%=ORSView.FORGET_PASSWORD_CTL%>"><b>Forget My Password
+			</b></a>
 		</div>
 	</form>
 </body>
