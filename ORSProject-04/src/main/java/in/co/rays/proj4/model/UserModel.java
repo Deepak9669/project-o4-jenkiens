@@ -378,6 +378,8 @@ public class UserModel {
             }
             if (bean.getFirstName() != null && bean.getFirstName().length() > 0) {
                 sql.append(" and first_name like '" + bean.getFirstName() + "%'");
+                
+               
             }
             if (bean.getLastName() != null && bean.getLastName().length() > 0) {
                 sql.append(" and last_name like '" + bean.getLastName() + "%'");
@@ -389,7 +391,7 @@ public class UserModel {
                 sql.append(" and password like '" + bean.getPassword() + "%'");
             }
             if (bean.getDob() != null && bean.getDob().getDate() > 0) {
-                sql.append(" and dob = " + bean.getDob());
+                sql.append(" and dob like '" + new java.sql.Date(bean.getDob().getTime()) + "%'");
             }
             if (bean.getMobileNo() != null && bean.getMobileNo().length() > 0) {
                 sql.append(" and mobile_no = " + bean.getMobileNo());

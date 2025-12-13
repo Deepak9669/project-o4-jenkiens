@@ -89,8 +89,6 @@
 	<a href="<%=ORSView.LOGIN_CTL %>?operation<%=LoginCtl.OP_LOG_OUT%>"><b>Logout</b></a>
 	<b>|</b>
 	<a href="<%=ORSView.USER1_CTL %>"><b>Add User1</b></a>
-	<b>|</b>
-	<a href="<%=ORSView.USER1_LIST_CTL %>"><b>User1 List</b></a>
 	<%
 		} else {
 	%>

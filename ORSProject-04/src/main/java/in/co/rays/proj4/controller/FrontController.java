@@ -16,12 +16,9 @@ import javax.servlet.http.HttpSession;
 import in.co.rays.proj4.util.ServletUtility;
 
 /**
- * FrontController acts as a security filter for the application.
- * 
- * It checks whether the user session is active or not before allowing
- * access to secured resources under /doc and /ctl.
- * 
- * If the session is expired, it redirects the user to the login page.
+ *  Main Controller performs session checking and logging operations before
+ * calling any application controller. It prevents any user to access
+ * application without login.
  * 
  * @author Deepak Verma
  * @version 1.0
@@ -58,8 +55,8 @@ public class FrontController implements Filter {
         HttpServletResponse response = (HttpServletResponse) resp;
 
         HttpSession session = request.getSession();
+        
         String uri = request.getRequestURI();
-
         request.setAttribute("uri", uri);
 
         // Check if user session exists

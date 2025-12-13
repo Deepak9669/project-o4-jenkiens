@@ -53,19 +53,30 @@ public final class JDBCDataSource {
 	 * Private constructor to initialize C3P0 connection pool.
 	 */
 	private JDBCDataSource() {
-		try {
-			cpds = new ComboPooledDataSource();
-			cpds.setDriverClass(rb.getString("driver"));
-			cpds.setJdbcUrl(rb.getString("url"));
-			cpds.setUser(rb.getString("username"));
-			cpds.setPassword(rb.getString("password"));
-			cpds.setInitialPoolSize(Integer.parseInt(rb.getString("initialpoolsize")));
-			cpds.setAcquireIncrement(Integer.parseInt(rb.getString("acquireincrement")));
-			cpds.setMaxPoolSize(Integer.parseInt(rb.getString("maxpoolsize")));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+
+        try {
+            cpds = new ComboPooledDataSource();
+            cpds.setDriverClass(rb.getString("driver"));
+
+            String env = System.getProperty("env");
+
+            if ("docker".equals(env)) {
+                cpds.setJdbcUrl(rb.getString("url.docker"));
+            } else {
+                cpds.setJdbcUrl(rb.getString("url.local"));
+            }
+
+           
+            
+            cpds.setUser(rb.getString("username"));
+            cpds.setPassword(rb.getString("password"));
+            cpds.setInitialPoolSize(Integer.parseInt(rb.getString("initialpoolsize")));
+            cpds.setAcquireIncrement(Integer.parseInt(rb.getString("acquireincrement")));
+            cpds.setMaxPoolSize(Integer.parseInt(rb.getString("maxpoolsize")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * Returns the singleton instance of JDBCDataSource.
