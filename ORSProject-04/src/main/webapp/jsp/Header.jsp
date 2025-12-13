@@ -6,15 +6,13 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<<<<<<< HEAD
 <title>Header</title>
 
-<!-- JQuery -->
-=======
+
+
 <title>Insert title here</title>
 
-<!-- Include jQuery -->
->>>>>>> 46e2c92a4942fedc2ef46f7ed2ac9209a96037b5
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <link rel="stylesheet"
@@ -25,9 +23,7 @@
 </head>
 
 <body>
-<<<<<<< HEAD
 
-<!-- Logo -->
 <img src="<%=request.getContextPath()%>/img/customLogo.jpg" align="right"
      width="100" height="40" border="0">
 
@@ -36,18 +32,18 @@
     boolean loggedIn = user != null;
 %>
 
-<!-- Logged In View -->
+
 <% if (loggedIn) { %>
 
     <h3>Hi, <%=user.getFirstName()%> (<%=session.getAttribute("role")%>)</h3>
 
-    <!-- Common menus -->
+    
     <a href="<%=ORSView.MY_PROFILE_CTL%>"><b>My Profile</b></a> |
     <a href="<%=ORSView.CHANGE_PASSWORD_CTL%>"><b>Change Password</b></a> |
     <a href="<%=ORSView.GET_MARKSHEET_CTL%>"><b>Get Marksheet</b></a> |
     <a href="<%=ORSView.MARKSHEET_MERIT_LIST_CTL%>"><b>Merit List</b></a> |
 
-    <!-- Admin Only -->
+    
     <% if (user.getRoleId() == RoleBean.ADMIN) { %>
 
         <a href="<%=ORSView.USER_CTL%>"><b>Add User</b></a> |
@@ -100,8 +96,6 @@
 <% } %>
 
 <hr>
-
-=======
 
 <img src="<%=request.getContextPath()%>/img/customLogo.jpg" align="right" width="100" height="40"
 				border="0">
@@ -175,6 +169,5 @@
 	%>
 	
 	<hr>
->>>>>>> 46e2c92a4942fedc2ef46f7ed2ac9209a96037b5
 </body>
 </html>
