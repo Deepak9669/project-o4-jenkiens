@@ -67,10 +67,11 @@
 				
 				
 				<tr>
-					<th align="left">Date of Visit<span style="color: red">*</span></th>
-					<td><input type="Date"  name="dateOfVisit"
-						placeholder="Select Date of Visit"
-						value="<%=DataUtility.getDateString(bean.getDateOfVisit())%>"></td>
+					<th align="left">Date of visit<span style="width: 98%"
+						style="color: red">*</span></th>
+					<td><input type="text" id="udate" name="dateOfVisit" placeholder="Select your date"
+						value="<%=DataUtility.getDateString(bean.getDateOfVisit())%>"
+						style="width: 98%"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("dateOfVisit", request)%></font></td>
 				</tr>
 				<tr>

@@ -37,7 +37,7 @@
 				User
 			</h1>
 
-			<div style="height: 12px; margin-bottom: 5px">
+			<div style="height: 15px; margin-bottom: 10px">
 				<H3 align="center">
 					<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 					</font>
@@ -105,7 +105,7 @@
 				<tr>
 					<th align="left">Date of Birth<span style="width: 98%"
 						style="color: red">*</span></th>
-					<td><input type="text" id="udate" name="dob"
+					<td><input type="text" id="udate" name="dob" placeholder="Select your date"
 						value="<%=DataUtility.getDateString(bean.getDob())%>"
 						style="width: 98%"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font></td>

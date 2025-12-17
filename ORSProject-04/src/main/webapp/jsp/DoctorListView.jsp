@@ -19,7 +19,7 @@
 
 <html>
 <head>
-<title>Patient List</title>
+<title>Doctor List</title>
 <link rel="icon" type="image/png"
 	href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16" />
 </head>
@@ -30,7 +30,7 @@
 		scope="request"></jsp:useBean>
 
 	<div align="center">
-		<h1 align="center" style="margin-bottom: -15; color: navy;">Patient
+		<h1 align="center" style="margin-bottom: -15; color: navy;">Doctor
 			List</h1>
 
 		<div style="height: 15px; margin-bottom: 12px">
@@ -65,7 +65,7 @@
 						type="text" name="name" placeholder="Enter  Name"
 						value="<%=ServletUtility.getParameter("name", request)%>">&emsp;
 
-						<label><b>Date Of Birth:</b></label> <input type="Date"
+						<label><b>Date Of Birth:</b></label> <input type="text" id="udate"
 						name="dateOfBirth" placeholder="Enter Date Of Birth"
 						value="<%=ServletUtility.getParameter("dateOfBirth", request)%>">&emsp;
 

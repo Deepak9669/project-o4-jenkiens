@@ -88,6 +88,7 @@ public class PatientCtl extends BaseCtl {
 		bean.setId(DataUtility.getLong(request.getParameter("id")));
 		bean.setName(DataUtility.getString(request.getParameter("name")));
 		bean.setDateOfVisit(DataUtility.getDate(request.getParameter("dateOfVisit")));
+		System.out.println(request.getParameter("dateOfVisit"));
 		bean.setMobile(DataUtility.getString(request.getParameter("mobile")));
 		bean.setDisease(DataUtility.getString(request.getParameter("disease")));
 
