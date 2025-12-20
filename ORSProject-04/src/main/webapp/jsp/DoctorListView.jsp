@@ -1,18 +1,12 @@
 <%@page import="in.co.rays.proj4.controller.DoctorListCtl"%>
 <%@page import="in.co.rays.proj4.bean.DoctorBean"%>
 <%@page import="java.util.HashMap"%>
-<%@page import="in.co.rays.proj4.model.PatientModel"%>
-<%@page import="in.co.rays.proj4.bean.PatientBean"%>
-<%@page import="in.co.rays.proj4.controller.PatientListCtl"%>
-<%@page import="in.co.rays.proj4.bean.RoleBean"%>
-<%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="in.co.rays.proj4.util.HTMLUtility"%>
-<%@page import="in.co.rays.proj4.model.RoleModel"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="in.co.rays.proj4.util.DataUtility"%>
 <%@page import="in.co.rays.proj4.bean.BaseBean"%>
-<%@page import="in.co.rays.proj4.controller.UserListCtl"%>
+<%@page import="in.co.rays.proj4.controller.ORSView"%>
 <%@page import="in.co.rays.proj4.util.ServletUtility"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
@@ -47,33 +41,38 @@
 				int pageNo = ServletUtility.getPageNo(request);
 				int pageSize = ServletUtility.getPageSize(request);
 				int index = ((pageNo - 1) * pageSize) + 1;
-				int nextListSize = DataUtility.getInt(request.getAttribute("nextListSize").toString());
+
+				Object n = request.getAttribute("nextListSize");
+				int nextListSize = (n != null) ? DataUtility.getInt(n.toString()) : 0;
 
 				HashMap<String,String> expertiseMap = (HashMap<String,String>) request.getAttribute("expertiseMap");
 				List<DoctorBean> list = (List<DoctorBean>) ServletUtility.getList(request);
-				Iterator<DoctorBean> it = list.iterator();
-
-				if (list.size() != 0) {
+				
+				if (list != null && !list.isEmpty()) {
+					Iterator<DoctorBean> it = list.iterator();
 			%>
 
-			<input type="hidden" name="pageNo" value="<%=pageNo%>"> <input
-				type="hidden" name="pageSize" value="<%=pageSize%>">
+			<input type="hidden" name="pageNo" value="<%=pageNo%>">
+			<input type="hidden" name="pageSize" value="<%=pageSize%>">
 
 			<table style="width: 100%">
 				<tr>
-					<td align="center"><label><b>Name :</b></label> <input
-						type="text" name="name" placeholder="Enter  Name"
+					<td align="center">
+						<label><b>Name :</b></label>
+						<input type="text" name="name" placeholder="Enter Name"
 						value="<%=ServletUtility.getParameter("name", request)%>">&emsp;
 
-						<label><b>Date Of Birth:</b></label> <input type="text" id="udate"
+						<label><b>Date Of Birth:</b></label>
+						<input type="text" id="udate"
 						name="dateOfBirth" placeholder="Enter Date Of Birth"
 						value="<%=ServletUtility.getParameter("dateOfBirth", request)%>">&emsp;
 
-                        <label><b>Disease : </b></label> <%=HTMLUtility.getList("expertiseMap", String.valueOf(bean.getExpertise()), expertiseMap)%>&emsp;
-
+                        <label><b>Expertise : </b></label>
+                        <%=HTMLUtility.getList("expertise", String.valueOf(bean.getExpertise()), expertiseMap)%>&emsp;
                         
 						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_SEARCH%>"> &nbsp; 
-						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_RESET%>"></td>
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_RESET%>">
+					</td>
 				</tr>
 			</table>
 			<br>
@@ -83,30 +82,29 @@
 					<th width="5%"><input type="checkbox" id="selectall" /></th>
 					<th width="5%">S.No</th>
 					<th width="13%">Name</th>
-					<th width="13%">Date Of Brth</th>
+					<th width="13%">Date Of Birth</th>
 					<th width="10%">Mobile No</th>
-					<th width="8%">Disease</th>
+					<th width="8%">Expertise</th>
 					<th width="5%">Edit</th>
 				</tr>
 
 				<%
 					while (it.hasNext()) {
-							bean = (DoctorBean) it.next();
-
+						bean = (DoctorBean) it.next();
 				%>
 
 				<tr>
 					<td style="text-align: center;">
-					<input type="checkbox"	class="case" name="ids" value="<%=bean.getId()%>">
-						
+						<input type="checkbox" class="case" name="ids" value="<%=bean.getId()%>">
 					</td>
-					<td ><%=index++%></td>
-					<td ><%=bean.getName()%></td>
-					<td ><%=bean.getDateOfBirth()%></td>
-					<td ><%=bean.getMobile()%></td>
-					<td ><%=bean.getExpertise()%></td>
+					<td><%=index++%></td>
+					<td><%=bean.getName()%></td>
+					<td><%=bean.getDateOfBirth()%></td>
+					<td><%=bean.getMobile()%></td>
+					<td><%=bean.getExpertise()%></td>
 
-					<td style="text-align: center;"><a href="DoctorCtl?id=<%=bean.getId()%>">Edit</a>
+					<td style="text-align: center;">
+						<a href="DoctorCtl?id=<%=bean.getId()%>">Edit</a>
 					</td>
 				</tr>
 
@@ -118,13 +116,20 @@
 			<table style="width: 100%">
 				<tr>
 					<td style="width: 25%">
-					<input type="submit" name="operation" value="<%=PatientListCtl.OP_PREVIOUS%>"
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_PREVIOUS%>"
 						<%=pageNo > 1 ? "" : "disabled"%>>
 					</td>
-					<td align="center" style="width: 25%"><input type="submit" name="operation" value="<%=PatientListCtl.OP_NEW%>"></td>
+
+					<td align="center" style="width: 25%">
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_NEW%>">
+					</td>
 					
-					<td align="center" style="width: 25%"><input type="submit" name="operation" value="<%=PatientListCtl.OP_DELETE%>"></td>
-					<td style="width: 25%" align="right"><input type="submit" name="operation" value="<%=PatientListCtl.OP_NEXT%>"
+					<td align="center" style="width: 25%">
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_DELETE%>">
+					</td>
+
+					<td style="width: 25%" align="right">
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_NEXT%>"
 						<%=nextListSize != 0 ? "" : "disabled"%>>
 					</td>
 				</tr>
@@ -136,8 +141,9 @@
 
 			<table>
 				<tr>
-					<td align="right"><input type="submit" name="operation"
-						value="<%=PatientListCtl.OP_BACK%>"></td>
+					<td align="right">
+						<input type="submit" name="operation" value="<%=DoctorListCtl.OP_BACK%>">
+					</td>
 				</tr>
 			</table>
 
