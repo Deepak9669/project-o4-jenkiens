@@ -60,6 +60,10 @@
 	<a href="<%=ORSView.PATIENT_LIST_CTL%>"><b>Patient List</b></a> |
 	<a href="<%=ORSView.DOCTOR_CTL%>"><b>Add Doctor</b></a> |
 	<a href="<%=ORSView.DOCTOR_LIST_CTL%>"><b>Doctor List</b></a> |
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 2b411bedf48b8b0758962bc2fb16fdf4354e5ad8
 	
 
 
