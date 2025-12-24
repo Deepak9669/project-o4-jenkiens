@@ -22,7 +22,7 @@
 			scope="request"></jsp:useBean>
 
 		<div align="center">
-			<h1>Login 25/12/2025</h1>
+			<h1>Login </h1>
 
 
 			
