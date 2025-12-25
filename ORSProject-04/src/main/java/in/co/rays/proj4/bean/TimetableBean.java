@@ -2,10 +2,14 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * TimetableBean represents Exam Timetable details.
+ * <p>
  * Stores course, subject, semester and exam timing information.
- * 
+ * <p>
  * Used for data transfer and dropdown lists.
  * 
  * @author Deepak Verma
@@ -13,96 +17,196 @@ import java.util.Date;
  */
 public class TimetableBean extends BaseBean {
 
-	private String semester;
-	private String description;
-	private Date examDate;
-	private String examTime;
-	private long courseId;
-	private String courseName;
-	private long subjectId;
-	private String subjectName;
+    /**
+     * Log4j logger for TimetableBean.
+     */
+    private static final Logger log = Logger.getLogger(TimetableBean.class);
 
-	public String getSemester() {
-		return semester;
-	}
+    /** Semester */
+    private String semester;
 
-	public void setSemester(String semester) {
-		this.semester = semester;
-	}
+    /** Description */
+    private String description;
 
-	public String getDescription() {
-		return description;
-	}
+    /** Exam date */
+    private Date examDate;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /** Exam time */
+    private String examTime;
 
-	public Date getExamDate() {
-		return examDate;
-	}
+    /** Course ID */
+    private long courseId;
 
-	public void setExamDate(Date examDate) {
-		this.examDate = examDate;
-	}
+    /** Course name */
+    private String courseName;
 
-	public String getExamTime() {
-		return examTime;
-	}
+    /** Subject ID */
+    private long subjectId;
 
-	public void setExamTime(String examTime) {
-		this.examTime = examTime;
-	}
+    /** Subject name */
+    private String subjectName;
 
-	public long getCourseId() {
-		return courseId;
-	}
+    /**
+     * Gets semester.
+     *
+     * @return semester
+     */
+    public String getSemester() {
+        return semester;
+    }
 
-	public void setCourseId(long courseId) {
-		this.courseId = courseId;
-	}
+    /**
+     * Sets semester.
+     *
+     * @param semester semester
+     */
+    public void setSemester(String semester) {
+        this.semester = semester;
+    }
 
-	public String getCourseName() {
-		return courseName;
-	}
+    /**
+     * Gets description.
+     *
+     * @return description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	public void setCourseName(String courseName) {
-		this.courseName = courseName;
-	}
+    /**
+     * Sets description.
+     *
+     * @param description description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public long getSubjectId() {
-		return subjectId;
-	}
+    /**
+     * Gets exam date.
+     *
+     * @return exam date
+     */
+    public Date getExamDate() {
+        return examDate;
+    }
 
-	public void setSubjectId(long subjectId) {
-		this.subjectId = subjectId;
-	}
+    /**
+     * Sets exam date.
+     *
+     * @param examDate exam date
+     */
+    public void setExamDate(Date examDate) {
+        this.examDate = examDate;
+    }
 
-	public String getSubjectName() {
-		return subjectName;
-	}
+    /**
+     * Gets exam time.
+     *
+     * @return exam time
+     */
+    public String getExamTime() {
+        return examTime;
+    }
 
-	public void setSubjectName(String subjectName) {
-		this.subjectName = subjectName;
-	}
+    /**
+     * Sets exam time.
+     *
+     * @param examTime exam time
+     */
+    public void setExamTime(String examTime) {
+        this.examTime = examTime;
+    }
 
-	/**
-	 * Returns dropdown key.
-	 * 
-	 * @return timetable id
-	 */
-	@Override
-	public String getKey() {
-		return String.valueOf(id);
-	}
+    /**
+     * Gets course ID.
+     *
+     * @return course id
+     */
+    public long getCourseId() {
+        return courseId;
+    }
 
-	/**
-	 * Returns display value for dropdown.
-	 * 
-	 * @return subject name + exam time
-	 */
-	@Override
-	public String getValue() {
-		return subjectName + " - " + examTime;
-	}
+    /**
+     * Sets course ID.
+     *
+     * @param courseId course id
+     */
+    public void setCourseId(long courseId) {
+        this.courseId = courseId;
+    }
+
+    /**
+     * Gets course name.
+     *
+     * @return course name
+     */
+    public String getCourseName() {
+        return courseName;
+    }
+
+    /**
+     * Sets course name.
+     *
+     * @param courseName course name
+     */
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
+    /**
+     * Gets subject ID.
+     *
+     * @return subject id
+     */
+    public long getSubjectId() {
+        return subjectId;
+    }
+
+    /**
+     * Sets subject ID.
+     *
+     * @param subjectId subject id
+     */
+    public void setSubjectId(long subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    /**
+     * Gets subject name.
+     *
+     * @return subject name
+     */
+    public String getSubjectName() {
+        return subjectName;
+    }
+
+    /**
+     * Sets subject name.
+     *
+     * @param subjectName subject name
+     */
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    /**
+     * Returns dropdown key.
+     * 
+     * @return timetable id
+     */
+    @Override
+    public String getKey() {
+        return String.valueOf(id);
+    }
+
+    /**
+     * Returns display value for dropdown.
+     * 
+     * @return subject name + exam time
+     */
+    @Override
+    public String getValue() {
+        return subjectName + " - " + examTime;
+    }
 }

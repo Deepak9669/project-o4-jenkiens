@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.bean.SubjectBean;
 import in.co.rays.proj4.exception.ApplicationException;
@@ -22,6 +24,9 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class SubjectModel {
 
+    /** Logger instance for SubjectModel */
+    private static Logger log = Logger.getLogger(SubjectModel.class);
+
     /**
      * Gets the next primary key for the st_subject table.
      *
@@ -31,16 +36,26 @@ public class SubjectModel {
     public Integer nextPk() throws DatabaseException {
         Connection conn = null;
         int pk = 0;
+
+        log.debug("nextPk() started");
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_subject");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("select max(id) from st_subject");
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 pk = rs.getInt(1);
             }
+
             rs.close();
             pstmt.close();
+
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in nextPk()", e);
             throw new DatabaseException("Exception : Exception in getting PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -56,9 +71,13 @@ public class SubjectModel {
      * @throws ApplicationException     if any application level error occurs
      * @throws DuplicateRecordException if subject with same name already exists
      */
-    public long add(SubjectBean bean) throws ApplicationException, DuplicateRecordException {
+    public long add(SubjectBean bean)
+            throws ApplicationException, DuplicateRecordException {
+
         Connection conn = null;
         int pk = 0;
+
+        log.info("add() called for Subject : " + bean.getName());
 
         CourseModel courseModel = new CourseModel();
         CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
@@ -66,14 +85,18 @@ public class SubjectModel {
 
         SubjectBean existBean = findByName(bean.getName());
         if (existBean != null) {
+            log.warn("Duplicate Subject Name found : " + bean.getName());
             throw new DuplicateRecordException("Subject Name already exists");
         }
 
         try {
             conn = JDBCDataSource.getConnection();
             pk = nextPk();
-            conn.setAutoCommit(false); // Begin transaction
-            PreparedStatement pstmt = conn.prepareStatement("insert into st_subject values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            conn.setAutoCommit(false);
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "insert into st_subject values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
             pstmt.setInt(1, pk);
             pstmt.setString(2, bean.getName());
             pstmt.setLong(3, bean.getCourseId());
@@ -83,15 +106,21 @@ public class SubjectModel {
             pstmt.setString(7, bean.getModifiedBy());
             pstmt.setTimestamp(8, bean.getCreatedDatetime());
             pstmt.setTimestamp(9, bean.getModifiedDatetime());
+
             pstmt.executeUpdate();
-            conn.commit(); // End transaction
+            conn.commit();
+
+            log.info("Subject added successfully PK : " + pk);
+
             pstmt.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in add()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : add rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : add rollback exception " + ex.getMessage());
             }
             throw new ApplicationException("Exception : Exception in add Subject");
         } finally {
@@ -107,24 +136,32 @@ public class SubjectModel {
      * @throws ApplicationException     if any application level error occurs
      * @throws DuplicateRecordException if another subject with same name already exists
      */
-    public void update(SubjectBean bean) throws ApplicationException, DuplicateRecordException {
+    public void update(SubjectBean bean)
+            throws ApplicationException, DuplicateRecordException {
+
         Connection conn = null;
+
+        log.info("update() called for Subject ID : " + bean.getId());
 
         CourseModel courseModel = new CourseModel();
         CourseBean courseBean = courseModel.findByPk(bean.getCourseId());
         bean.setCourseName(courseBean.getName());
-        
+
         SubjectBean existBean = findByName(bean.getName());
         if (existBean != null && existBean.getId() != bean.getId()) {
+            log.warn("Duplicate Subject Name during update : " + bean.getName());
             throw new DuplicateRecordException("Subject Name already exists");
         }
-        
+
         try {
             conn = JDBCDataSource.getConnection();
+            conn.setAutoCommit(false);
 
-            conn.setAutoCommit(false); // Begin transaction
             PreparedStatement pstmt = conn.prepareStatement(
-                    "update st_subject set name = ?, course_id = ?, course_name = ?, description = ?, created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
+                "update st_subject set name = ?, course_id = ?, course_name = ?, "
+              + "description = ?, created_by = ?, modified_by = ?, "
+              + "created_datetime = ?, modified_datetime = ? where id = ?");
+
             pstmt.setString(1, bean.getName());
             pstmt.setLong(2, bean.getCourseId());
             pstmt.setString(3, bean.getCourseName());
@@ -134,14 +171,21 @@ public class SubjectModel {
             pstmt.setTimestamp(7, bean.getCreatedDatetime());
             pstmt.setTimestamp(8, bean.getModifiedDatetime());
             pstmt.setLong(9, bean.getId());
+
             pstmt.executeUpdate();
-            conn.commit(); // End transaction
+            conn.commit();
+
+            log.info("Subject updated successfully ID : " + bean.getId());
+
             pstmt.close();
+
         } catch (Exception e) {
+            log.error("Exception in update()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : Delete rollback exception " + ex.getMessage());
             }
             throw new ApplicationException("Exception in updating Subject ");
         } finally {
@@ -156,24 +200,35 @@ public class SubjectModel {
      * @throws ApplicationException if any application level error occurs
      */
     public void delete(SubjectBean bean) throws ApplicationException {
+
         Connection conn = null;
+        log.info("delete() called for Subject ID : " + bean.getId());
+
         try {
             conn = JDBCDataSource.getConnection();
-            conn.setAutoCommit(false); // Begin transaction
-            PreparedStatement pstmt = conn.prepareStatement("delete from st_subject where id = ?");
+            conn.setAutoCommit(false);
+
+            PreparedStatement pstmt =
+                    conn.prepareStatement("delete from st_subject where id = ?");
             pstmt.setLong(1, bean.getId());
             pstmt.executeUpdate();
-            conn.commit(); // End transaction
+            conn.commit();
+
+            log.info("Subject deleted successfully ID : " + bean.getId());
+
             pstmt.close();
+
         } catch (Exception e) {
+            log.error("Exception in delete()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : Delete rollback exception " + ex.getMessage());
             }
             throw new ApplicationException("Exception : Exception in delete Subject");
         } finally {
-           	JDBCDataSource.closeConnection(conn);
+            JDBCDataSource.closeConnection(conn);
         }
     }
 
@@ -185,14 +240,22 @@ public class SubjectModel {
      * @throws ApplicationException if any application level error occurs
      */
     public SubjectBean findByPk(long pk) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_subject where id = ?");
+
+        log.debug("findByPk() called PK : " + pk);
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_subject where id = ?");
         SubjectBean bean = null;
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt =
+                    conn.prepareStatement(sql.toString());
             pstmt.setLong(1, pk);
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new SubjectBean();
                 bean.setId(rs.getLong(1));
@@ -205,9 +268,12 @@ public class SubjectModel {
                 bean.setCreatedDatetime(rs.getTimestamp(8));
                 bean.setModifiedDatetime(rs.getTimestamp(9));
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
+            log.error("Exception in findByPk()", e);
             throw new ApplicationException("Exception : Exception in getting Subject by pk");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -223,14 +289,22 @@ public class SubjectModel {
      * @throws ApplicationException if any application level error occurs
      */
     public SubjectBean findByName(String name) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_subject where name = ?");
+
+        log.debug("findByName() called Name : " + name);
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_subject where name = ?");
         SubjectBean bean = null;
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt =
+                    conn.prepareStatement(sql.toString());
             pstmt.setString(1, name);
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new SubjectBean();
                 bean.setId(rs.getLong(1));
@@ -243,10 +317,14 @@ public class SubjectModel {
                 bean.setCreatedDatetime(rs.getTimestamp(8));
                 bean.setModifiedDatetime(rs.getTimestamp(9));
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
-            throw new ApplicationException("Exception : Exception in getting Subject by Subject Name");
+            log.error("Exception in findByName()", e);
+            throw new ApplicationException(
+                    "Exception : Exception in getting Subject by Subject Name");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }
@@ -260,6 +338,7 @@ public class SubjectModel {
      * @throws ApplicationException if any application level error occurs
      */
     public List<SubjectBean> list() throws ApplicationException {
+        log.debug("list() called");
         return search(null, 0, 0);
     }
 
@@ -272,8 +351,13 @@ public class SubjectModel {
      * @return list of SubjectBean matching criteria
      * @throws ApplicationException if any application level error occurs
      */
-    public List<SubjectBean> search(SubjectBean bean, int pageNo, int pageSize) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_subject where 1=1");
+    public List<SubjectBean> search(SubjectBean bean, int pageNo, int pageSize)
+            throws ApplicationException {
+
+        log.debug("search() called");
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_subject where 1=1");
 
         if (bean != null) {
             if (bean.getId() > 0) {
@@ -291,7 +375,6 @@ public class SubjectModel {
             if (bean.getDescription() != null && bean.getDescription().length() > 0) {
                 sql.append(" and description like '" + bean.getDescription() + "%'");
             }
-
         }
 
         if (pageSize > 0) {
@@ -299,12 +382,15 @@ public class SubjectModel {
             sql.append(" limit " + pageNo + ", " + pageSize);
         }
 
-        ArrayList<SubjectBean> list = new ArrayList<SubjectBean>();
+        ArrayList<SubjectBean> list = new ArrayList<>();
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt =
+                    conn.prepareStatement(sql.toString());
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new SubjectBean();
                 bean.setId(rs.getLong(1));
@@ -318,9 +404,12 @@ public class SubjectModel {
                 bean.setModifiedDatetime(rs.getTimestamp(9));
                 list.add(bean);
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
+            log.error("Exception in search()", e);
             throw new ApplicationException("Exception : Exception in search Subject");
         } finally {
             JDBCDataSource.closeConnection(conn);

@@ -35,6 +35,19 @@ public class DataUtility {
 	public static String getStringData(Object val) {
 		return (val != null) ? val.toString() : "";
 	}
+	public static double getDouble(String val) {
+
+	    if (DataValidator.isNull(val)) {
+	        return 0.0;
+	    }
+
+	    try {
+	        return Double.parseDouble(val);
+	    } catch (Exception e) {
+	        return 0.0;
+	    }
+	}
+
 
 	/**
 	 * Convert string into int safely

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.exception.ApplicationException;
 import in.co.rays.proj4.exception.DatabaseException;
@@ -23,6 +25,9 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class CourseModel {
 
+    /** Logger instance for CourseModel */
+    private static Logger log = Logger.getLogger(CourseModel.class);
+
     /**
      * Gets the next primary key value for the {@code st_course} table.
      *
@@ -33,29 +38,35 @@ public class CourseModel {
 
         Connection conn = null;
         int pk = 0;
+
+        log.debug("nextPk() started");
+
         try {
             conn = JDBCDataSource.getConnection();
 
-            PreparedStatement pstmt = conn.prepareStatement("select max(id)from st_course");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("select max(id)from st_course");
 
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 pk = rs.getInt(1);
             }
+
             rs.close();
             pstmt.close();
 
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in nextPk()", e);
             throw new DatabaseException("Exception : Exception in getting PK");
 
         } finally {
             JDBCDataSource.closeConnection(conn);
-
         }
 
         return pk + 1;
-
     }
 
     /**
@@ -66,13 +77,18 @@ public class CourseModel {
      * @throws ApplicationException     if any application level error occurs
      * @throws DuplicateRecordException if a course with same name already exists
      */
-    public long add(CourseBean bean) throws ApplicationException, DuplicateRecordException {
+    public long add(CourseBean bean)
+            throws ApplicationException, DuplicateRecordException {
+
         Connection conn = null;
         int pk = 0;
+
+        log.info("add() called for Course : " + bean.getName());
 
         CourseBean existBean = findByName(bean.getName());
 
         if (existBean != null) {
+            log.warn("Duplicate Course : " + bean.getName());
             throw new DuplicateRecordException("Course Name already exists");
         }
 
@@ -80,7 +96,10 @@ public class CourseModel {
             conn = JDBCDataSource.getConnection();
             pk = nextPk();
             conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement("insert into st_course values(?, ?, ?, ?, ?, ?, ?, ?)");
+
+            PreparedStatement pstmt = conn.prepareStatement(
+                    "insert into st_course values(?, ?, ?, ?, ?, ?, ?, ?)");
+
             pstmt.setInt(1, pk);
             pstmt.setString(2, bean.getName());
             pstmt.setString(3, bean.getDuration());
@@ -89,17 +108,24 @@ public class CourseModel {
             pstmt.setString(6, bean.getModifiedBy());
             pstmt.setTimestamp(7, bean.getCreatedDatetime());
             pstmt.setTimestamp(8, bean.getModifiedDatetime());
+
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Course added successfully with PK : " + pk);
+
             pstmt.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Exception in add()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : add rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : add rollback exception " + ex.getMessage());
             }
-            throw new ApplicationException("Exception : Exception in add Course");
+            throw new ApplicationException(
+                    "Exception : Exception in add Course");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }
@@ -113,19 +139,26 @@ public class CourseModel {
      * @throws ApplicationException     if any application level error occurs
      * @throws DuplicateRecordException if another course with same name already exists
      */
-    public void update(CourseBean bean) throws ApplicationException, DuplicateRecordException {
+    public void update(CourseBean bean)
+            throws ApplicationException, DuplicateRecordException {
+
         Connection conn = null;
+
+        log.info("update() called for Course ID : " + bean.getId());
 
         CourseBean existBean = findByName(bean.getName());
         if (existBean != null && existBean.getId() != bean.getId()) {
+            log.warn("Duplicate Course during update : " + bean.getName());
             throw new DuplicateRecordException("Course already exists");
         }
+
         try {
             conn = JDBCDataSource.getConnection();
-
             conn.setAutoCommit(false);
+
             PreparedStatement pstmt = conn.prepareStatement(
                     "update st_course set name = ?, duration = ?, description = ?, created_by = ?, modified_by = ?, created_datetime = ?, modified_datetime = ? where id = ?");
+
             pstmt.setString(1, bean.getName());
             pstmt.setString(2, bean.getDuration());
             pstmt.setString(3, bean.getDescription());
@@ -134,16 +167,24 @@ public class CourseModel {
             pstmt.setTimestamp(6, bean.getCreatedDatetime());
             pstmt.setTimestamp(7, bean.getModifiedDatetime());
             pstmt.setLong(8, bean.getId());
+
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Course updated successfully ID : " + bean.getId());
+
             pstmt.close();
+
         } catch (Exception e) {
+            log.error("Exception in update()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : Delete rollback exception " + ex.getMessage());
             }
-            throw new ApplicationException("Exception in updating Course ");
+            throw new ApplicationException(
+                    "Exception in updating Course ");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }
@@ -156,25 +197,37 @@ public class CourseModel {
      * @throws ApplicationException if any application level error occurs
      */
     public void delete(CourseBean bean) throws ApplicationException {
+
         Connection conn = null;
+
+        log.info("delete() called for Course ID : " + bean.getId());
+
         try {
             conn = JDBCDataSource.getConnection();
             conn.setAutoCommit(false);
-            PreparedStatement pstmt = conn.prepareStatement("delete from st_course where id = ?");
+
+            PreparedStatement pstmt =
+                    conn.prepareStatement("delete from st_course where id = ?");
             pstmt.setLong(1, bean.getId());
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Course deleted successfully ID : " + bean.getId());
+
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in delete()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
-                throw new ApplicationException("Exception : Delete rollback exception " + ex.getMessage());
+                throw new ApplicationException(
+                        "Exception : Delete rollback exception " + ex.getMessage());
             }
-            throw new ApplicationException("Exception : Exception in delete Course");
+            throw new ApplicationException(
+                    "Exception : Exception in delete Course");
         } finally {
-           	JDBCDataSource.closeConnection(conn);
+            JDBCDataSource.closeConnection(conn);
         }
     }
 
@@ -186,14 +239,22 @@ public class CourseModel {
      * @throws ApplicationException if any application level error occurs
      */
     public CourseBean findByPk(long pk) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_course where id = ?");
+
+        log.debug("findByPk() called PK : " + pk);
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_course where id = ?");
+
         CourseBean bean = null;
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             pstmt.setLong(1, pk);
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new CourseBean();
                 bean.setId(rs.getLong(1));
@@ -205,10 +266,14 @@ public class CourseModel {
                 bean.setCreatedDatetime(rs.getTimestamp(7));
                 bean.setModifiedDatetime(rs.getTimestamp(8));
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
-            throw new ApplicationException("Exception : Exception in getting Course by pk");
+            log.error("Exception in findByPk()", e);
+            throw new ApplicationException(
+                    "Exception : Exception in getting Course by pk");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }
@@ -223,31 +288,41 @@ public class CourseModel {
      * @throws ApplicationException if any application level error occurs
      */
     public CourseBean findByName(String name) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_course where name = ?");
+
+        log.debug("findByName() called Name : " + name);
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_course where name = ?");
+
         CourseBean bean = null;
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql.toString());
             pstmt.setString(1, name);
+
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new CourseBean();
                 bean.setId(rs.getLong(1));
                 bean.setName(rs.getString(2));
                 bean.setDuration(rs.getString(3));
-               	bean.setDescription(rs.getString(4));
-               	bean.setCreatedBy(rs.getString(5));
-               	bean.setModifiedBy(rs.getString(6));
-               	bean.setCreatedDatetime(rs.getTimestamp(7));
-               	bean.setModifiedDatetime(rs.getTimestamp(8));
-
+                bean.setDescription(rs.getString(4));
+                bean.setCreatedBy(rs.getString(5));
+                bean.setModifiedBy(rs.getString(6));
+                bean.setCreatedDatetime(rs.getTimestamp(7));
+                bean.setModifiedDatetime(rs.getTimestamp(8));
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new ApplicationException("Exception : Exception in getting Course by Course Name");
+            log.error("Exception in findByName()", e);
+            throw new ApplicationException(
+                    "Exception : Exception in getting Course by Course Name");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }
@@ -261,6 +336,7 @@ public class CourseModel {
      * @throws ApplicationException if any application level error occurs
      */
     public List<CourseBean> list() throws ApplicationException {
+        log.debug("list() called");
         return search(null, 0, 0);
     }
 
@@ -273,8 +349,13 @@ public class CourseModel {
      * @return list of CourseBean matching the criteria
      * @throws ApplicationException if any application level error occurs
      */
-    public List<CourseBean> search(CourseBean bean, int pageNo, int pageSize) throws ApplicationException {
-        StringBuffer sql = new StringBuffer("select * from st_course where 1=1");
+    public List<CourseBean> search(CourseBean bean, int pageNo, int pageSize)
+            throws ApplicationException {
+
+        log.debug("search() called");
+
+        StringBuffer sql =
+                new StringBuffer("select * from st_course where 1=1");
 
         if (bean != null) {
             if (bean.getId() > 0) {
@@ -298,10 +379,13 @@ public class CourseModel {
 
         ArrayList<CourseBean> list = new ArrayList<CourseBean>();
         Connection conn = null;
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt =
+                    conn.prepareStatement(sql.toString());
             ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                 bean = new CourseBean();
                 bean.setId(rs.getLong(1));
@@ -314,10 +398,14 @@ public class CourseModel {
                 bean.setModifiedDatetime(rs.getTimestamp(8));
                 list.add(bean);
             }
+
             rs.close();
             pstmt.close();
+
         } catch (Exception e) {
-            throw new ApplicationException("Exception : Exception in search Course");
+            log.error("Exception in search()", e);
+            throw new ApplicationException(
+                    "Exception : Exception in search Course");
         } finally {
             JDBCDataSource.closeConnection(conn);
         }

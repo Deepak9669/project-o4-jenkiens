@@ -1,5 +1,8 @@
 package in.co.rays.proj4.bean;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * CollegeBean represents the College entity.
  * <p>
@@ -12,119 +15,62 @@ package in.co.rays.proj4.bean;
  */
 public class CollegeBean extends BaseBean {
 
-	private String name;
-	private String address;
-	private String state;
-	private String city;
-	private String phoneNo;
+    // Log4j 1.2.17 Logger (NO logic change)
+    private static final Logger log = Logger.getLogger(CollegeBean.class);
 
-	/**
-	 * Gets the college name.
-	 * 
-	 * @return college name
-	 */
-	public String getName() {
-		return name;
-	}
+    private String name;
+    private String address;
+    private String state;
+    private String city;
+    private String phoneNo;
 
-	/**
-	 * Sets the college name.
-	 * 
-	 * @param name the college name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gets the college address.
-	 * 
-	 * @return address
-	 */
-	public String getAddress() {
-		return address;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Sets the college address.
-	 * 
-	 * @param address the college address
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	/**
-	 * Gets the state of the college.
-	 * 
-	 * @return state
-	 */
-	public String getState() {
-		return state;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	/**
-	 * Sets the state of the college.
-	 * 
-	 * @param state the state
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
+    public String getState() {
+        return state;
+    }
 
-	/**
-	 * Gets the city of the college.
-	 * 
-	 * @return city
-	 */
-	public String getCity() {
-		return city;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	/**
-	 * Sets the city of the college.
-	 * 
-	 * @param city the city
-	 */
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	/**
-	 * Gets the phone number of the college.
-	 * 
-	 * @return phone number
-	 */
-	public String getPhoneNo() {
-		return phoneNo;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	/**
-	 * Sets the phone number of the college.
-	 * 
-	 * @param phoneNo the phone number
-	 */
-	public void setPhoneNo(String phoneNo) {
-		this.phoneNo = phoneNo;
-	}
+    public String getPhoneNo() {
+        return phoneNo;
+    }
 
-	/**
-	 * Returns key value for dropdown list.
-	 * 
-	 * @return id as String
-	 */
-	@Override
-	public String getKey() {
-		return String.valueOf(id);
-	}
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
+    }
 
-	/**
-	 * Returns display value for dropdown list.
-	 * 
-	 * @return college name
-	 */
-	@Override
-	public String getValue() {
-		return name;
-	}
+    @Override
+    public String getKey() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public String getValue() {
+        return name;
+    }
 }

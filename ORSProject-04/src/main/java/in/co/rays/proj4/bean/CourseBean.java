@@ -1,5 +1,8 @@
 package in.co.rays.proj4.bean;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * CourseBean represents the Course entity.
  * <p>
@@ -11,81 +14,44 @@ package in.co.rays.proj4.bean;
  */
 public class CourseBean extends BaseBean {
 
-	private String name;
-	private String duration;
-	private String description;
+    // Log4j 1.2.17 Logger (NO logic change)
+    private static final Logger log = Logger.getLogger(CourseBean.class);
 
-	/**
-	 * Gets the course name.
-	 * 
-	 * @return course name
-	 */
-	public String getName() {
-		return name;
-	}
+    private String name;
+    private String duration;
+    private String description;
 
-	/**
-	 * Sets the course name.
-	 * 
-	 * @param name the course name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gets the course duration.
-	 * 
-	 * @return course duration
-	 */
-	public String getDuration() {
-		return duration;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Sets the course duration.
-	 * 
-	 * @param duration the course duration
-	 */
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
+    public String getDuration() {
+        return duration;
+    }
 
-	/**
-	 * Gets the course description.
-	 * 
-	 * @return course description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
-	/**
-	 * Sets the course description.
-	 * 
-	 * @param description the course description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Returns key for dropdown list.
-	 * 
-	 * @return id as String
-	 */
-	@Override
-	public String getKey() {
-		return String.valueOf(id);
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * Returns display value for dropdown list.
-	 * 
-	 * @return course name
-	 */
-	@Override
-	public String getValue() {
-		return name;
-	}
+    @Override
+    public String getKey() {
+        return String.valueOf(id);
+    }
+
+    @Override
+    public String getValue() {
+        return name;
+    }
 }

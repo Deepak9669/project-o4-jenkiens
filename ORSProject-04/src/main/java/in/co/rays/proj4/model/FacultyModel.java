@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.bean.CourseBean;
 import in.co.rays.proj4.bean.FacultyBean;
@@ -23,6 +25,9 @@ import in.co.rays.proj4.util.JDBCDataSource;
  */
 public class FacultyModel {
 
+    /** Logger instance for FacultyModel */
+    private static Logger log = Logger.getLogger(FacultyModel.class);
+
     /**
      * Get next primary key from database.
      */
@@ -31,18 +36,25 @@ public class FacultyModel {
         Connection conn = null;
         int pk = 0;
 
+        log.debug("nextPk() started");
+
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement("select max(id) from st_faculty");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("select max(id) from st_faculty");
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 pk = rs.getInt(1);
             }
+
             rs.close();
             pstmt.close();
 
+            log.debug("Next PK generated : " + (pk + 1));
+
         } catch (Exception e) {
+            log.error("Exception in nextPk()", e);
             throw new DatabaseException("Exception : Exception in getting PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -53,10 +65,13 @@ public class FacultyModel {
     /**
      * Add new Faculty record.
      */
-    public long add(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
+    public long add(FacultyBean bean)
+            throws ApplicationException, DuplicateRecordException {
 
         Connection conn = null;
         int pk = 0;
+
+        log.info("add() called for Faculty Email : " + bean.getEmail());
 
         // Set College Name
         CollegeModel collegeModel = new CollegeModel();
@@ -76,6 +91,7 @@ public class FacultyModel {
         // Check for duplicate email
         FacultyBean existBean = findByEmail(bean.getEmail());
         if (existBean != null) {
+            log.warn("Duplicate Email found : " + bean.getEmail());
             throw new DuplicateRecordException("Email Id already exists");
         }
 
@@ -85,7 +101,8 @@ public class FacultyModel {
             conn.setAutoCommit(false);
 
             PreparedStatement pstmt = conn.prepareStatement(
-                    "insert into st_faculty values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                "insert into st_faculty values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
             pstmt.setInt(1, pk);
             pstmt.setString(2, bean.getFirstName());
             pstmt.setString(3, bean.getLastName());
@@ -106,9 +123,13 @@ public class FacultyModel {
 
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Faculty added successfully with PK : " + pk);
+
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in add()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
@@ -125,7 +146,10 @@ public class FacultyModel {
     /**
      * Update Faculty record.
      */
-    public void update(FacultyBean bean) throws ApplicationException, DuplicateRecordException {
+    public void update(FacultyBean bean)
+            throws ApplicationException, DuplicateRecordException {
+
+        log.info("update() called for Faculty ID : " + bean.getId());
 
         // Set related names again
         CollegeModel collegeModel = new CollegeModel();
@@ -139,6 +163,7 @@ public class FacultyModel {
 
         FacultyBean existBean = findByEmail(bean.getEmail());
         if (existBean != null && existBean.getId() != bean.getId()) {
+            log.warn("Duplicate Email during update : " + bean.getEmail());
             throw new DuplicateRecordException("Email Id already exists");
         }
 
@@ -149,10 +174,10 @@ public class FacultyModel {
             conn.setAutoCommit(false);
 
             PreparedStatement pstmt = conn.prepareStatement(
-                    "update st_faculty set first_name=?, last_name=?, dob=?, gender=?, mobile_no=?, email=?, "
-                            + "college_id=?, college_name=?, course_id=?, course_name=?, "
-                            + "subject_id=?, subject_name=?, created_by=?, modified_by=?, "
-                            + "created_datetime=?, modified_datetime=? where id=?");
+                "update st_faculty set first_name=?, last_name=?, dob=?, gender=?, mobile_no=?, email=?, "
+              + "college_id=?, college_name=?, course_id=?, course_name=?, "
+              + "subject_id=?, subject_name=?, created_by=?, modified_by=?, "
+              + "created_datetime=?, modified_datetime=? where id=?");
 
             pstmt.setString(1, bean.getFirstName());
             pstmt.setString(2, bean.getLastName());
@@ -174,9 +199,13 @@ public class FacultyModel {
 
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Faculty updated successfully ID : " + bean.getId());
+
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in update()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
@@ -194,19 +223,25 @@ public class FacultyModel {
     public void delete(FacultyBean bean) throws ApplicationException {
 
         Connection conn = null;
+        log.info("delete() called for Faculty ID : " + bean.getId());
 
         try {
             conn = JDBCDataSource.getConnection();
             conn.setAutoCommit(false);
 
-            PreparedStatement pstmt = conn.prepareStatement("delete from st_faculty where id = ?");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("delete from st_faculty where id = ?");
             pstmt.setLong(1, bean.getId());
 
             pstmt.executeUpdate();
             conn.commit();
+
+            log.info("Faculty deleted successfully ID : " + bean.getId());
+
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in delete()", e);
             try {
                 conn.rollback();
             } catch (Exception ex) {
@@ -223,12 +258,15 @@ public class FacultyModel {
      */
     public FacultyBean findByPk(long pk) throws ApplicationException {
 
+        log.debug("findByPk() called PK : " + pk);
+
         FacultyBean bean = null;
         Connection conn = null;
 
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement("select * from st_faculty where id=?");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("select * from st_faculty where id=?");
             pstmt.setLong(1, pk);
 
             ResultSet rs = pstmt.executeQuery();
@@ -258,6 +296,7 @@ public class FacultyModel {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByPk()", e);
             throw new ApplicationException("Exception in finding Faculty by PK");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -271,12 +310,15 @@ public class FacultyModel {
      */
     public FacultyBean findByEmail(String email) throws ApplicationException {
 
+        log.debug("findByEmail() called Email : " + email);
+
         FacultyBean bean = null;
         Connection conn = null;
 
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement("select * from st_faculty where email=?");
+            PreparedStatement pstmt =
+                    conn.prepareStatement("select * from st_faculty where email=?");
             pstmt.setString(1, email);
 
             ResultSet rs = pstmt.executeQuery();
@@ -289,6 +331,7 @@ public class FacultyModel {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in findByEmail()", e);
             throw new ApplicationException("Exception in finding Faculty by Email");
         } finally {
             JDBCDataSource.closeConnection(conn);
@@ -301,22 +344,31 @@ public class FacultyModel {
      * Get Faculty List.
      */
     public List<FacultyBean> list() throws ApplicationException {
+        log.debug("list() called");
         return search(null, 0, 0);
     }
 
     /**
      * Search Faculty with filters.
      */
-    public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize) throws ApplicationException {
+    public List<FacultyBean> search(FacultyBean bean, int pageNo, int pageSize)
+            throws ApplicationException {
 
-        StringBuffer sql = new StringBuffer("select * from st_faculty where 1=1");
+        log.debug("search() called");
+
+        StringBuffer sql = new StringBuffer(
+                "select * from st_faculty where 1=1");
 
         if (bean != null) {
 
-            if (bean.getId() > 0) sql.append(" and id = " + bean.getId());
-            if (bean.getCollegeId() > 0) sql.append(" and college_id = " + bean.getCollegeId());
-            if (bean.getCourseId() > 0) sql.append(" and course_id = " + bean.getCourseId());
-            if (bean.getSubjectId() > 0) sql.append(" and subject_id = " + bean.getSubjectId());
+            if (bean.getId() > 0)
+                sql.append(" and id = " + bean.getId());
+            if (bean.getCollegeId() > 0)
+                sql.append(" and college_id = " + bean.getCollegeId());
+            if (bean.getCourseId() > 0)
+                sql.append(" and course_id = " + bean.getCourseId());
+            if (bean.getSubjectId() > 0)
+                sql.append(" and subject_id = " + bean.getSubjectId());
 
             if (bean.getFirstName() != null)
                 sql.append(" and first_name like '" + bean.getFirstName() + "%'");
@@ -335,7 +387,8 @@ public class FacultyModel {
 
         try {
             conn = JDBCDataSource.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+            PreparedStatement pstmt =
+                    conn.prepareStatement(sql.toString());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -347,6 +400,7 @@ public class FacultyModel {
             pstmt.close();
 
         } catch (Exception e) {
+            log.error("Exception in search()", e);
             throw new ApplicationException("Exception in searching Faculty");
         } finally {
             JDBCDataSource.closeConnection(conn);

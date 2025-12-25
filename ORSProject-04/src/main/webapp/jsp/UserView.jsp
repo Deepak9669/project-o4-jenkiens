@@ -22,6 +22,7 @@
 
 		<%
 			List<UserBean> roleList = (List<UserBean>) request.getAttribute("roleList");
+			HashMap<String, String> map = (HashMap<String, String>) request.getAttribute("map");
 		%>
 
 		<div align="center">
@@ -36,7 +37,7 @@
 				User
 			</h1>
 
-			<div style="height: 12px; margin-bottom: 5px">
+			<div style="height: 15px; margin-bottom: 10px">
 				<H3 align="center">
 					<font color="red"> <%=ServletUtility.getErrorMessage(request)%>
 					</font>
@@ -48,12 +49,14 @@
 				</H3>
 			</div>
 
-			<input type="hidden" name="id" value="<%=bean.getId()%>"> 
-			
-			<input type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
-			<input type="hidden" name="modifiedBy" value="<%=bean.getModifiedBy()%>"> 
-			<input type="hidden" name="createdDatetime" value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
-			<input type="hidden" name="modifiedDatetime" value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
+			<input type="hidden" name="id" value="<%=bean.getId()%>"> <input
+				type="hidden" name="createdBy" value="<%=bean.getCreatedBy()%>">
+			<input type="hidden" name="modifiedBy"
+				value="<%=bean.getModifiedBy()%>"> <input type="hidden"
+				name="createdDatetime"
+				value="<%=DataUtility.getTimestamp(bean.getCreatedDatetime())%>">
+			<input type="hidden" name="modifiedDatetime"
+				value="<%=DataUtility.getTimestamp(bean.getModifiedDatetime())%>">
 
 			<table>
 				<tr>
@@ -77,7 +80,12 @@
 						value="<%=DataUtility.getStringData(bean.getLogin())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("login", request)%></font></td>
 				</tr>
-				<tr>
+					<%
+					if (bean != null && bean.getId() > 0) {
+				%>
+				<%
+					} else {
+				%><tr>
 					<th align="left">Password<span style="color: red">*</span></th>
 					<td><input type="password" name="password"
 						placeholder="Enter Password"
@@ -91,19 +99,22 @@
 						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("confirmPassword", request)%></font></td>
 				</tr>
+				<%
+					}
+				%>
 				<tr>
 					<th align="left">Date of Birth<span style="width: 98%"
 						style="color: red">*</span></th>
-					<td><input type="text" id="udate"name="dob" value="<%=DataUtility.getDateString(bean.getDob())%>" style="width: 98%"></td>
+					<td><input type="text" id="udate" name="dob" placeholder="Select your date"
+						value="<%=DataUtility.getDateString(bean.getDob())%>"
+						style="width: 98%"></td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font></td>
 				</tr>
 				<tr>
 					<th align="left">Gender<span style="color: red">*</span></th>
 					<td>
 						<%
-							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("Male", "Male");
-							map.put("Female", "Female");
+						
 
 							String htmlList = HTMLUtility.getList("gender", bean.getGender(), map);
 						%> <%=htmlList%>

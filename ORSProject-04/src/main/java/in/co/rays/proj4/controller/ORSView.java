@@ -90,10 +90,27 @@ public interface ORSView {
 
 	public String JAVA_DOC = "/ORSProject-04/doc/index.html";
 
-	public String USER1_VIEW = PAGE_FOLDER + "/User1View.jsp";
-	public String USER1_CTL = APP_CONTEXT + "/User1Ctl";
+	public String PATIENT_VIEW = PAGE_FOLDER + "/PatientView.jsp";
+	public String PATIENT_CTL = APP_CONTEXT + "/ctl/PatientCtl";
 
-	public String USER1_LIST_VIEW = PAGE_FOLDER + "/User1ListView.jsp";
-	public String USER1_LIST_CTL = PAGE_FOLDER + "/User1ListCtl";
+	public String PATIENT_LIST_VIEW = PAGE_FOLDER + "/PatientListView.jsp";
+	public String PATIENT_LIST_CTL = APP_CONTEXT + "/ctl/PatientListCtl";
 
+	public String DOCTOR_VIEW = PAGE_FOLDER + "/DoctorView.jsp";
+	public String DOCTOR_CTL = APP_CONTEXT + "/ctl/DoctorCtl";
+
+	public String DOCTOR_LIST_VIEW = PAGE_FOLDER + "/DoctorListView.jsp";
+	public String DOCTOR_LIST_CTL = APP_CONTEXT + "/ctl/DoctorListCtl";
+
+	public String ACCOUNT_VIEW = PAGE_FOLDER + "/AccountView.jsp";
+	public String ACCOUNT_CTL = APP_CONTEXT + "/ctl/AccountCtl";
+
+	public String ACCOUNT_LIST_VIEW = PAGE_FOLDER + "/AccountListView.jsp";
+	public String ACCOUNT_LIST_CTL = APP_CONTEXT + "/ctl/AccountListCtl";
+
+	public String CUSTOMER_VIEW = PAGE_FOLDER + "/CustomerView.jsp";
+	public String CUSTOMER_CTL = APP_CONTEXT + "/ctl/customerCtl";
+
+	public String CUSTOMER_LIST_VIEW = PAGE_FOLDER + "/CustomerListView.jsp";
+	public String CUSTOMER_LIST_CTL = APP_CONTEXT + "/ctl/CustomerListCtl";
 }

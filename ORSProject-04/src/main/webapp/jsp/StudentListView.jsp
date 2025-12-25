@@ -6,7 +6,7 @@
 <%@page import="in.co.rays.proj4.bean.StudentBean"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
-<html>
+<html>"src/main/webapp/jsp/StudentListView.jsp"
 <head>
     <title>Student List</title>
     <link rel="icon" type="image/png" href="<%=ORSView.APP_CONTEXT%>/img/logo.png" sizes="16x16" />

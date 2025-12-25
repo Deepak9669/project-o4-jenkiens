@@ -2,10 +2,14 @@ package in.co.rays.proj4.bean;
 
 import java.util.Date;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * UserBean represents user information in the system.
+ * <p>
  * It is used for authentication, authorization and user profile data.
- * 
+ * <p>
  * Implements DropdownListBean through BaseBean.
  * 
  * @author Deepak Verma
@@ -13,155 +17,217 @@ import java.util.Date;
  */
 public class UserBean extends BaseBean {
 
-	private String firstName;
-	private String lastName;
-	private String login;
-	private String password;
-	private String confirmPassword;
-	private Date dob;
-	private String mobileNo;
-	private long roleId;
-	private String gender;
+    /**
+     * Log4j logger for UserBean.
+     */
+    private static final Logger log = Logger.getLogger(UserBean.class);
 
-	/**
-	 * Gets first name.
-	 */
-	public String getFirstName() {
-		return firstName;
-	}
+    /** First name */
+    private String firstName;
 
-	/**
-	 * Sets first name.
-	 */
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    /** Last name */
+    private String lastName;
 
-	/**
-	 * Gets last name.
-	 */
-	public String getLastName() {
-		return lastName;
-	}
+    /** Login (email / username) */
+    private String login;
 
-	/**
-	 * Sets last name.
-	 */
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    /** User password */
+    private String password;
 
-	/**
-	 * Gets login (email / username).
-	 */
-	public String getLogin() {
-		return login;
-	}
+    /** Confirm password */
+    private String confirmPassword;
 
-	/**
-	 * Sets login (email / username).
-	 */
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    /** Date of birth */
+    private Date dob;
 
-	/**
-	 * Gets user password.
-	 */
-	public String getPassword() {
-		return password;
-	}
+    /** Mobile number */
+    private String mobileNo;
 
-	/**
-	 * Sets user password.
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /** Role ID */
+    private long roleId;
 
-	/**
-	 * Gets confirm password.
-	 */
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
+    /** Gender */
+    private String gender;
 
-	/**
-	 * Sets confirm password.
-	 */
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
+    /**
+     * Gets first name.
+     * 
+     * @return first name
+     */
+    public String getFirstName() {
+        return firstName;
+    }
 
-	/**
-	 * Gets date of birth.
-	 */
-	public Date getDob() {
-		return dob;
-	}
+    /**
+     * Sets first name.
+     * 
+     * @param firstName first name
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	/**
-	 * Sets date of birth.
-	 */
-	public void setDob(Date dob) {
-		this.dob = dob;
-	}
+    /**
+     * Gets last name.
+     * 
+     * @return last name
+     */
+    public String getLastName() {
+        return lastName;
+    }
 
-	/**
-	 * Gets mobile number.
-	 */
-	public String getMobileNo() {
-		return mobileNo;
-	}
+    /**
+     * Sets last name.
+     * 
+     * @param lastName last name
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	/**
-	 * Sets mobile number.
-	 */
-	public void setMobileNo(String mobileNo) {
-		this.mobileNo = mobileNo;
-	}
+    /**
+     * Gets login (email / username).
+     * 
+     * @return login
+     */
+    public String getLogin() {
+        return login;
+    }
 
-	/**
-	 * Gets role ID.
-	 */
-	public long getRoleId() {
-		return roleId;
-	}
+    /**
+     * Sets login (email / username).
+     * 
+     * @param login login
+     */
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
-	/**
-	 * Sets role ID.
-	 */
-	public void setRoleId(long roleId) {
-		this.roleId = roleId;
-	}
+    /**
+     * Gets user password.
+     * 
+     * @return password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * Gets gender.
-	 */
-	public String getGender() {
-		return gender;
-	}
+    /**
+     * Sets user password.
+     * 
+     * @param password password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	/**
-	 * Sets gender.
-	 */
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    /**
+     * Gets confirm password.
+     * 
+     * @return confirm password
+     */
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
 
-	/**
-	 * Dropdown key (id).
-	 */
-	@Override
-	public String getKey() {
-		return String.valueOf(id);
-	}
+    /**
+     * Sets confirm password.
+     * 
+     * @param confirmPassword confirm password
+     */
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
 
-	/**
-	 * Dropdown display value (full name).
-	 */
-	@Override
-	public String getValue() {
-		return firstName + " " + lastName;
-	}
+    /**
+     * Gets date of birth.
+     * 
+     * @return date of birth
+     */
+    public Date getDob() {
+        return dob;
+    }
+
+    /**
+     * Sets date of birth.
+     * 
+     * @param dob date of birth
+     */
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
+    /**
+     * Gets mobile number.
+     * 
+     * @return mobile number
+     */
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    /**
+     * Sets mobile number.
+     * 
+     * @param mobileNo mobile number
+     */
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    /**
+     * Gets role ID.
+     * 
+     * @return role id
+     */
+    public long getRoleId() {
+        return roleId;
+    }
+
+    /**
+     * Sets role ID.
+     * 
+     * @param roleId role id
+     */
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
+    }
+
+    /**
+     * Gets gender.
+     * 
+     * @return gender
+     */
+    public String getGender() {
+        return gender;
+    }
+
+    /**
+     * Sets gender.
+     * 
+     * @param gender gender
+     */
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * Dropdown key (id).
+     * 
+     * @return user id as string
+     */
+    @Override
+    public String getKey() {
+        return String.valueOf(id);
+    }
+
+    /**
+     * Dropdown display value (full name).
+     * 
+     * @return full name
+     */
+    @Override
+    public String getValue() {
+        return firstName + " " + lastName;
+    }
 }

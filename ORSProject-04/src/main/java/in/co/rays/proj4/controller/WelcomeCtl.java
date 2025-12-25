@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.util.ServletUtility;
 
 /**
@@ -20,6 +23,11 @@ import in.co.rays.proj4.util.ServletUtility;
  */
 @WebServlet(name = "WelcomeCtl", urlPatterns = { "/WelcomeCtl" })
 public class WelcomeCtl extends BaseCtl {
+
+    /**
+     * Log4j logger for WelcomeCtl.
+     */
+    private static final Logger log = Logger.getLogger(WelcomeCtl.class);
 
     /**
      * Handles GET request and forwards to Welcome page.

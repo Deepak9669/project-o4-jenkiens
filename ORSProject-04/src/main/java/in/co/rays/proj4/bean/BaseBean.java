@@ -2,6 +2,9 @@ package in.co.rays.proj4.bean;
 
 import java.sql.Timestamp;
 
+// Log4j 1.2.17 imports
+import org.apache.log4j.Logger;
+
 /**
  * Base bean class that contains common audit fields for all entities.
  * <p>
@@ -16,6 +19,9 @@ import java.sql.Timestamp;
  * @version 1.0
  */
 public abstract class BaseBean implements DropdownListBean {
+
+    // Log4j 1.2.17 Logger (NO logic change)
+    private static final Logger log = Logger.getLogger(BaseBean.class);
 
     /**
      * Primary key ID.
@@ -42,94 +48,43 @@ public abstract class BaseBean implements DropdownListBean {
      */
     protected Timestamp modifiedDatetime;
 
-    /**
-     * Gets the primary key ID.
-     *
-     * @return the ID
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets the primary key ID.
-     *
-     * @param id the ID to set
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets the creator user.
-     *
-     * @return createdBy
-     */
     public String getCreatedBy() {
         return createdBy;
     }
 
-    /**
-     * Sets the creator user.
-     *
-     * @param createdBy the creator user to set
-     */
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
     }
 
-    /**
-     * Gets the last modifier user.
-     *
-     * @return modifiedBy
-     */
     public String getModifiedBy() {
         return modifiedBy;
     }
 
-    /**
-     * Sets the last modifier user.
-     *
-     * @param modifiedBy the modifier user to set
-     */
     public void setModifiedBy(String modifiedBy) {
         this.modifiedBy = modifiedBy;
     }
 
-    /**
-     * Gets the creation timestamp.
-     *
-     * @return createdDatetime
-     */
     public Timestamp getCreatedDatetime() {
         return createdDatetime;
     }
 
-    /**
-     * Sets the creation timestamp.
-     *
-     * @param createdDatetime the creation timestamp to set
-     */
     public void setCreatedDatetime(Timestamp createdDatetime) {
         this.createdDatetime = createdDatetime;
     }
 
-    /**
-     * Gets the last modified timestamp.
-     *
-     * @return modifiedDatetime
-     */
     public Timestamp getModifiedDatetime() {
         return modifiedDatetime;
     }
 
-    /**
-     * Sets the last modified timestamp.
-     *
-     * @param modifiedDatetime the modified timestamp to set
-     */
     public void setModifiedDatetime(Timestamp modifiedDatetime) {
         this.modifiedDatetime = modifiedDatetime;
     }
-
 }

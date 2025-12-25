@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.RoleBean;
 import in.co.rays.proj4.exception.ApplicationException;
@@ -31,6 +34,11 @@ import in.co.rays.proj4.util.ServletUtility;
 public class RoleCtl extends BaseCtl {
 
     /**
+     * Log4j logger for RoleCtl.
+     */
+    private static final Logger log = Logger.getLogger(RoleCtl.class);
+
+    /**
      * Validates Role form input fields.
      *
      * @param request HTTP request object
@@ -50,7 +58,8 @@ public class RoleCtl extends BaseCtl {
         }
 
         if (DataValidator.isNull(request.getParameter("description"))) {
-            request.setAttribute("description", PropertyReader.getValue("error.require", "Description"));
+            request.setAttribute("description",
+                    PropertyReader.getValue("error.require", "Description"));
             pass = false;
         }
 
@@ -79,16 +88,12 @@ public class RoleCtl extends BaseCtl {
 
     /**
      * Handles GET request to display Role form for Add/Update.
-     *
-     * @param request  HTTP request
-     * @param response HTTP response
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Long id = DataUtility.getLong(request.getParameter("id"));
-
         RoleModel model = new RoleModel();
 
         if (id > 0) {
@@ -106,20 +111,14 @@ public class RoleCtl extends BaseCtl {
     }
 
     /**
-     * Handles POST request for Save, Update, Reset and Cancel operations
-     * for Role.
-     *
-     * @param request  HTTP request
-     * @param response HTTP response
+     * Handles POST request for Save, Update, Reset and Cancel operations.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String op = DataUtility.getString(request.getParameter("operation"));
-
         RoleModel model = new RoleModel();
-
         Long id = DataUtility.getLong(request.getParameter("id"));
 
         if (OP_SAVE.equalsIgnoreCase(op)) {
@@ -132,7 +131,6 @@ public class RoleCtl extends BaseCtl {
                 ServletUtility.setSuccessMessage("Role added successfully", request);
 
             } catch (DuplicateRecordException e) {
-
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setErrorMessage("Role already exists", request);
 
@@ -147,21 +145,17 @@ public class RoleCtl extends BaseCtl {
             RoleBean bean = (RoleBean) populateBean(request);
 
             try {
-
                 if (id > 0) {
                     model.update(bean);
                 }
-
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setSuccessMessage("Role updated successfully", request);
 
             } catch (DuplicateRecordException e) {
-
                 ServletUtility.setBean(bean, request);
                 ServletUtility.setErrorMessage("Role already exists", request);
 
             } catch (ApplicationException e) {
-
                 e.printStackTrace();
                 ServletUtility.handleException(e, request, response);
                 return;

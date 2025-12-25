@@ -16,20 +16,20 @@ import in.co.rays.proj4.exception.ApplicationException;
 /**
  * EmailUtility is responsible for sending emails using JavaMail API.
  * <p>
- * Configuration (SMTP host, port, username, password) is loaded from:
- * <br>
+ * Configuration (SMTP host, port, username, password) is loaded from: <br>
  * <b>in.co.rays.proj4.bundle.system</b> resource bundle.
  * <p>
  * It works together with {@link EmailMessage} and {@link EmailBuilder}.
  *
  * Example usage:
+ * 
  * <pre>
- *     EmailMessage msg = new EmailMessage();
- *     msg.setTo("user@mail.com");
- *     msg.setSubject("Test Mail");
- *     msg.setMessage("&lt;h1&gt;Hello&lt;/h1&gt;");
- *     msg.setMessageType(EmailMessage.HTML_MSG);
- *     EmailUtility.sendMail(msg);
+ * EmailMessage msg = new EmailMessage();
+ * msg.setTo("user@mail.com");
+ * msg.setSubject("Test Mail");
+ * msg.setMessage("&lt;h1&gt;Hello&lt;/h1&gt;");
+ * msg.setMessageType(EmailMessage.HTML_MSG);
+ * EmailUtility.sendMail(msg);
  * </pre>
  *
  * @author Deepak Verma
@@ -44,10 +44,10 @@ public class EmailUtility {
 	private static final String SMTP_PORT = rb.getString("smtp.port");
 	private static final String EMAIL_FROM_ADDRESS = rb.getString("email.login");
 	private static final String EMAIL_PASSWORD = rb.getString("email.pwd");
+	private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
 	private static final Properties props = new Properties();
 
-	// Static block to initialize mail properties once
 	static {
 		props.put("mail.smtp.host", SMTP_HOST_NAME);
 		props.put("mail.smtp.auth", "true");
@@ -56,7 +56,7 @@ public class EmailUtility {
 		props.put("mail.debug", "true");
 		props.put("mail.smtp.port", SMTP_PORT);
 		props.put("mail.smtp.socketFactory.port", SMTP_PORT);
-		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.socketFactory.class", SSL_FACTORY);
 		props.put("mail.smtp.socketFactory.fallback", "false");
 	}
 
@@ -87,8 +87,7 @@ public class EmailUtility {
 			msg.setSubject(emailMessageDTO.getSubject());
 
 			// Content type based on messageType
-			String contentType = (emailMessageDTO.getMessageType() == EmailMessage.HTML_MSG)
-					? "text/html"
+			String contentType = (emailMessageDTO.getMessageType() == EmailMessage.HTML_MSG) ? "text/html"
 					: "text/plain";
 
 			msg.setContent(emailMessageDTO.getMessage(), contentType);

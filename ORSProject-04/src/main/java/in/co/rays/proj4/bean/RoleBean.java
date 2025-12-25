@@ -1,5 +1,8 @@
 package in.co.rays.proj4.bean;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * RoleBean represents role details in the system.
  * <p>
@@ -11,67 +14,72 @@ package in.co.rays.proj4.bean;
  */
 public class RoleBean extends BaseBean {
 
-	public static final int ADMIN = 1;
-	public static final int STUDENT = 2;
-	public static final int FACULTY = 3;
-	public static final int KIOSK = 4;
+    /**
+     * Log4j logger for RoleBean.
+     */
+    private static final Logger log = Logger.getLogger(RoleBean.class);
 
-	private String name;
-	private String description;
+    public static final int ADMIN = 1;
+    public static final int STUDENT = 2;
+    public static final int FACULTY = 3;
+    public static final int KIOSK = 4;
 
-	/**
-	 * Gets role name.
-	 * 
-	 * @return role name
-	 */
-	public String getName() {
-		return name;
-	}
+    private String name;
+    private String description;
 
-	/**
-	 * Sets role name.
-	 * 
-	 * @param name role name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Gets role name.
+     * 
+     * @return role name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gets role description.
-	 * 
-	 * @return role description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * Sets role name.
+     * 
+     * @param name role name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Sets role description.
-	 * 
-	 * @param description role description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * Gets role description.
+     * 
+     * @return role description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * Returns key for dropdown list.
-	 * 
-	 * @return role id as string
-	 */
-	@Override
-	public String getKey() {
-		return String.valueOf(id);
-	}
+    /**
+     * Sets role description.
+     * 
+     * @param description role description
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * Returns value for dropdown list.
-	 * 
-	 * @return role name
-	 */
-	@Override
-	public String getValue() {
-		return name;
-	}
+    /**
+     * Returns key for dropdown list.
+     * 
+     * @return role id as string
+     */
+    @Override
+    public String getKey() {
+        return String.valueOf(id);
+    }
+
+    /**
+     * Returns value for dropdown list.
+     * 
+     * @return role name
+     */
+    @Override
+    public String getValue() {
+        return name;
+    }
 }

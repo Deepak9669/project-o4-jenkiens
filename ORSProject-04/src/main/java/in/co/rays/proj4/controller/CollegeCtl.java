@@ -7,6 +7,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.CollegeBean;
 import in.co.rays.proj4.exception.ApplicationException;
@@ -37,6 +40,11 @@ import in.co.rays.proj4.util.ServletUtility;
 public class CollegeCtl extends BaseCtl {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Log4j logger for CollegeCtl.
+     */
+    private static final Logger log = Logger.getLogger(CollegeCtl.class);
 
     /**
      * Validates request input for College form.

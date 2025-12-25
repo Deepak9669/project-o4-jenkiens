@@ -13,15 +13,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.util.ServletUtility;
 
 /**
- * FrontController acts as a security filter for the application.
+ * FrontController acts as a main filter for the application.
+ * <p>
+ * It performs:
+ * <ul>
+ *   <li>Session validation</li>
+ *   <li>Request logging</li>
+ *   <li>Prevents unauthorized access</li>
+ * </ul>
+ * </p>
  * 
- * It checks whether the user session is active or not before allowing
- * access to secured resources under /doc and /ctl.
- * 
- * If the session is expired, it redirects the user to the login page.
+ * Only authenticated users are allowed to access controllers and documents.
  * 
  * @author Deepak Verma
  * @version 1.0
@@ -29,21 +36,26 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebFilter(urlPatterns = { "/doc/*", "/ctl/*" })
 public class FrontController implements Filter {
 
+    /** Logger instance */
+    private static Logger log = Logger.getLogger(FrontController.class);
+
     /**
      * Initializes the filter.
-     * 
-     * @param conf Filter configuration object
-     * @throws ServletException in case of initialization error
+     *
+     * @param conf FilterConfig object
+     * @throws ServletException if initialization fails
      */
     @Override
     public void init(FilterConfig conf) throws ServletException {
-        // Optional initialization code
+        log.info("FrontController initialized");
     }
 
     /**
-     * Filters requests and checks for valid user session.
-     * If session is invalid, redirects to login page.
-     * 
+     * Performs session validation before allowing request to proceed.
+     * <p>
+     * If session is invalid, user is redirected to login page.
+     * </p>
+     *
      * @param req   ServletRequest
      * @param resp  ServletResponse
      * @param chain FilterChain
@@ -57,23 +69,26 @@ public class FrontController implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
 
-        HttpSession session = request.getSession();
-        
+        HttpSession session = request.getSession(false);
         String uri = request.getRequestURI();
+
         request.setAttribute("uri", uri);
+        log.debug("Requested URI : " + uri);
 
-        // Check if user session exists
-        if (session.getAttribute("user") == null) {
+        // Check user session
+        if (session == null || session.getAttribute("user") == null) {
 
-            request.setAttribute("error", "Your session has been expired. Please Login again!");
+            log.warn("Unauthorized access attempt for URI : " + uri);
+
+            request.setAttribute("error",
+                    "Your session has expired. Please login again!");
 
             ServletUtility.forward(ORSView.LOGIN_VIEW, request, response);
             return;
-
-        } else {
-            // If session exists, continue request chain
-            chain.doFilter(req, resp);
         }
+
+        log.debug("Valid session found, proceeding with request");
+        chain.doFilter(req, resp);
     }
 
     /**
@@ -81,6 +96,6 @@ public class FrontController implements Filter {
      */
     @Override
     public void destroy() {
-        // Optional cleanup code
+        log.info("FrontController destroyed");
     }
 }

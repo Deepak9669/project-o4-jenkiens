@@ -142,9 +142,16 @@ public class LoginCtl extends BaseCtl {
 					if (rolebean != null) {
 						session.setAttribute("role", rolebean.getName());
 					}
-
+					String uri = DataUtility.getString(request.getParameter("uri"));
+					System.out.println(uri);
+					if (uri == null || "null".equalsIgnoreCase(uri)) {
 					ServletUtility.redirect(ORSView.WELCOME_CTL, request, response);
 					return;
+					} else {
+						
+						ServletUtility.redirect(uri, request, response);
+						return;
+					}	
 
 				} else {
 
@@ -159,7 +166,7 @@ public class LoginCtl extends BaseCtl {
 				return;
 			}
 
-		} 
+		}
 		// Sign Up Navigation
 		else if (OP_SIGN_UP.equalsIgnoreCase(op)) {
 

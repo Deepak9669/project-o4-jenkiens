@@ -1,5 +1,8 @@
 package in.co.rays.proj4.bean;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 /**
  * MarksheetBean represents student's marksheet details.
  * <p>
@@ -11,138 +14,143 @@ package in.co.rays.proj4.bean;
  */
 public class MarksheetBean extends BaseBean {
 
-	private String rollNo;
-	private long studentId;
-	private String name;
-	private Integer physics;
-	private Integer chemistry;
-	private Integer maths;
+    /**
+     * Log4j logger for MarksheetBean.
+     */
+    private static final Logger log = Logger.getLogger(MarksheetBean.class);
 
-	/**
-	 * Gets roll number of student.
-	 * 
-	 * @return roll number
-	 */
-	public String getRollNo() {
-		return rollNo;
-	}
+    private String rollNo;
+    private long studentId;
+    private String name;
+    private Integer physics;
+    private Integer chemistry;
+    private Integer maths;
 
-	/**
-	 * Sets roll number of student.
-	 * 
-	 * @param rollNo roll number
-	 */
-	public void setRollNo(String rollNo) {
-		this.rollNo = rollNo;
-	}
+    /**
+     * Gets roll number of student.
+     * 
+     * @return roll number
+     */
+    public String getRollNo() {
+        return rollNo;
+    }
 
-	/**
-	 * Gets student ID.
-	 * 
-	 * @return student id
-	 */
-	public long getStudentId() {
-		return studentId;
-	}
+    /**
+     * Sets roll number of student.
+     * 
+     * @param rollNo roll number
+     */
+    public void setRollNo(String rollNo) {
+        this.rollNo = rollNo;
+    }
 
-	/**
-	 * Sets student ID.
-	 * 
-	 * @param studentId student id
-	 */
-	public void setStudentId(long studentId) {
-		this.studentId = studentId;
-	}
+    /**
+     * Gets student ID.
+     * 
+     * @return student id
+     */
+    public long getStudentId() {
+        return studentId;
+    }
 
-	/**
-	 * Gets student name.
-	 * 
-	 * @return student name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Sets student ID.
+     * 
+     * @param studentId student id
+     */
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
+    }
 
-	/**
-	 * Sets student name.
-	 * 
-	 * @param name student name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Gets student name.
+     * 
+     * @return student name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * Gets physics marks.
-	 * 
-	 * @return physics marks
-	 */
-	public Integer getPhysics() {
-		return physics;
-	}
+    /**
+     * Sets student name.
+     * 
+     * @param name student name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Sets physics marks.
-	 * 
-	 * @param physics physics marks
-	 */
-	public void setPhysics(Integer physics) {
-		this.physics = physics;
-	}
+    /**
+     * Gets physics marks.
+     * 
+     * @return physics marks
+     */
+    public Integer getPhysics() {
+        return physics;
+    }
 
-	/**
-	 * Gets chemistry marks.
-	 * 
-	 * @return chemistry marks
-	 */
-	public Integer getChemistry() {
-		return chemistry;
-	}
+    /**
+     * Sets physics marks.
+     * 
+     * @param physics physics marks
+     */
+    public void setPhysics(Integer physics) {
+        this.physics = physics;
+    }
 
-	/**
-	 * Sets chemistry marks.
-	 * 
-	 * @param chemistry chemistry marks
-	 */
-	public void setChemistry(Integer chemistry) {
-		this.chemistry = chemistry;
-	}
+    /**
+     * Gets chemistry marks.
+     * 
+     * @return chemistry marks
+     */
+    public Integer getChemistry() {
+        return chemistry;
+    }
 
-	/**
-	 * Gets maths marks.
-	 * 
-	 * @return maths marks
-	 */
-	public Integer getMaths() {
-		return maths;
-	}
+    /**
+     * Sets chemistry marks.
+     * 
+     * @param chemistry chemistry marks
+     */
+    public void setChemistry(Integer chemistry) {
+        this.chemistry = chemistry;
+    }
 
-	/**
-	 * Sets maths marks.
-	 * 
-	 * @param maths maths marks
-	 */
-	public void setMaths(Integer maths) {
-		this.maths = maths;
-	}
+    /**
+     * Gets maths marks.
+     * 
+     * @return maths marks
+     */
+    public Integer getMaths() {
+        return maths;
+    }
 
-	/**
-	 * Returns key for dropdown list.
-	 * 
-	 * @return roll number
-	 */
-	@Override
-	public String getKey() {
-		return rollNo;
-	}
+    /**
+     * Sets maths marks.
+     * 
+     * @param maths maths marks
+     */
+    public void setMaths(Integer maths) {
+        this.maths = maths;
+    }
 
-	/**
-	 * Returns display value for dropdown list.
-	 * 
-	 * @return student name with roll no
-	 */
-	@Override
-	public String getValue() {
-		return rollNo + " - " + name;
-	}
+    /**
+     * Returns key for dropdown list.
+     * 
+     * @return roll number
+     */
+    @Override
+    public String getKey() {
+        return rollNo;
+    }
+
+    /**
+     * Returns display value for dropdown list.
+     * 
+     * @return student name with roll no
+     */
+    @Override
+    public String getValue() {
+        return rollNo + " - " + name;
+    }
 }

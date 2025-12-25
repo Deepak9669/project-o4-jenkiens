@@ -20,6 +20,7 @@
 
 		<jsp:useBean id="bean" class="in.co.rays.proj4.bean.UserBean"
 			scope="request"></jsp:useBean>
+				<% HashMap <String,String> map =(HashMap <String,String>)request.getAttribute("map"); %>
 
 		<div align="center">
 			<h1>User Registration</h1>
@@ -57,7 +58,7 @@
 				</tr>
 				<tr>
 					<th>Password:</th>
-					<td><input type="text" name="password" placeholder="Enter Password"
+					<td><input type="password" name="password" placeholder="Enter Password"
 						value="<%=DataUtility.getStringData(bean.getPassword())%>"></td>
 
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("password", request)%></font></td>
@@ -71,7 +72,7 @@
 				</tr>
 				<tr>
 					<th>DOB:</th>
-					<td><input type="text" id="udate" name="dob" style="width: 98%" placeholder="Enter Dib"
+					<td><input type="text" id="udate" name="dob" style="width: 98%" placeholder="Enter Dob"
 					value="<%=DataUtility.getDateString(bean.getDob())%>"></td>
 
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("dob", request)%></font></td>
@@ -79,11 +80,9 @@
 				<tr>
 					<th>Gender:</th>
 					<td>
-						<%
-							HashMap map = new HashMap();
-							map.put("male", "male");
-							map.put("female", "female");
-						%> <%=HTMLUtility.getList("gender", DataUtility.getStringData(bean.getGender()), map)%>
+						
+							
+						<%=HTMLUtility.getList("gender", DataUtility.getStringData(bean.getGender()), map)%>
 					</td>
 					<td style="position: fixed;"><font color="red"> <%=ServletUtility.getErrorMessage("gender", request)%></font></td>
 				</tr>

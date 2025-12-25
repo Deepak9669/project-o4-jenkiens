@@ -8,6 +8,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.exception.ApplicationException;
@@ -29,6 +31,8 @@ import in.co.rays.proj4.util.ServletUtility;
 @WebServlet(name = "UserListCtl", urlPatterns = { "/ctl/UserListCtl" })
 public class UserListCtl extends BaseCtl {
 
+    private static Logger log = Logger.getLogger(UserListCtl.class);
+
     /**
      * Preloads Role list to be used as filter on User List page.
      *
@@ -37,13 +41,14 @@ public class UserListCtl extends BaseCtl {
     @Override
     protected void preload(HttpServletRequest request) {
 
-        RoleModel roleModel = new RoleModel();
+        log.debug("UserListCtl preload started");
 
+        RoleModel roleModel = new RoleModel();
         try {
             List roleList = roleModel.list();
             request.setAttribute("roleList", roleList);
         } catch (ApplicationException e) {
-            e.printStackTrace();
+            log.error("Error in preload()", e);
         }
     }
 
@@ -57,11 +62,16 @@ public class UserListCtl extends BaseCtl {
     @Override
     protected BaseBean populateBean(HttpServletRequest request) {
 
+        log.debug("UserListCtl populateBean started");
+
         UserBean bean = new UserBean();
 
-        bean.setFirstName(DataUtility.getString(request.getParameter("firstName")));
-        bean.setLogin(DataUtility.getString(request.getParameter("login")));
-        bean.setRoleId(DataUtility.getLong(request.getParameter("roleId")));
+        bean.setFirstName(DataUtility.getString(
+                request.getParameter("firstName")));
+        bean.setLogin(DataUtility.getString(
+                request.getParameter("login")));
+        bean.setRoleId(DataUtility.getLong(
+                request.getParameter("roleId")));
 
         return bean;
     }
@@ -71,15 +81,17 @@ public class UserListCtl extends BaseCtl {
      *
      * @param request  HTTP request
      * @param response HTTP response
-     * @throws ServletException
-     * @throws IOException
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
+        log.debug("UserListCtl doGet started");
+
         int pageNo = 1;
-        int pageSize = DataUtility.getInt(PropertyReader.getValue("page.size"));
+        int pageSize = DataUtility.getInt(
+                PropertyReader.getValue("page.size"));
 
         UserBean bean = (UserBean) populateBean(request);
         UserModel model = new UserModel();
@@ -102,8 +114,7 @@ public class UserListCtl extends BaseCtl {
             ServletUtility.forward(getView(), request, response);
 
         } catch (ApplicationException e) {
-
-            e.printStackTrace();
+            log.error("Error in doGet()", e);
             ServletUtility.handleException(e, request, response);
         }
     }
@@ -114,29 +125,34 @@ public class UserListCtl extends BaseCtl {
      *
      * @param request  HTTP request
      * @param response HTTP response
-     * @throws ServletException
-     * @throws IOException
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
+
+        log.debug("UserListCtl doPost started");
 
         List list = null;
         List next = null;
 
-        int pageNo = DataUtility.getInt(request.getParameter("pageNo"));
-        int pageSize = DataUtility.getInt(request.getParameter("pageSize"));
+        int pageNo = DataUtility.getInt(
+                request.getParameter("pageNo"));
+        int pageSize = DataUtility.getInt(
+                request.getParameter("pageSize"));
 
         pageNo = (pageNo == 0) ? 1 : pageNo;
         pageSize = (pageSize == 0)
-                ? DataUtility.getInt(PropertyReader.getValue("page.size"))
+                ? DataUtility.getInt(
+                        PropertyReader.getValue("page.size"))
                 : pageSize;
 
         UserBean bean = (UserBean) populateBean(request);
         UserModel model = new UserModel();
 
         String[] ids = request.getParameterValues("ids");
-        String op = DataUtility.getString(request.getParameter("operation"));
+        String op = DataUtility.getString(
+                request.getParameter("operation"));
 
         try {
 
@@ -148,13 +164,15 @@ public class UserListCtl extends BaseCtl {
                     pageNo = 1;
                 } else if (OP_NEXT.equalsIgnoreCase(op)) {
                     pageNo++;
-                } else if (OP_PREVIOUS.equalsIgnoreCase(op) && pageNo > 1) {
+                } else if (OP_PREVIOUS.equalsIgnoreCase(op)
+                        && pageNo > 1) {
                     pageNo--;
                 }
 
             } else if (OP_NEW.equalsIgnoreCase(op)) {
 
-                ServletUtility.redirect(ORSView.USER_CTL, request, response);
+                ServletUtility.redirect(
+                        ORSView.USER_CTL, request, response);
                 return;
 
             } else if (OP_DELETE.equalsIgnoreCase(op)) {
@@ -166,24 +184,24 @@ public class UserListCtl extends BaseCtl {
                     UserBean deleteBean = new UserBean();
 
                     for (String id : ids) {
-                        deleteBean.setId(DataUtility.getInt(id));
+                        deleteBean.setId(
+                                DataUtility.getInt(id));
                         model.delete(deleteBean);
                     }
 
-                    ServletUtility.setSuccessMessage("User deleted successfully", request);
+                    ServletUtility.setSuccessMessage(
+                            "User deleted successfully", request);
 
                 } else {
-                    ServletUtility.setErrorMessage("Select at least one record", request);
+                    ServletUtility.setErrorMessage(
+                            "Select at least one record", request);
                 }
 
-            } else if (OP_RESET.equalsIgnoreCase(op)) {
+            } else if (OP_RESET.equalsIgnoreCase(op)
+                    || OP_BACK.equalsIgnoreCase(op)) {
 
-                ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
-                return;
-
-            } else if (OP_BACK.equalsIgnoreCase(op)) {
-
-                ServletUtility.redirect(ORSView.USER_LIST_CTL, request, response);
+                ServletUtility.redirect(
+                        ORSView.USER_LIST_CTL, request, response);
                 return;
             }
 
@@ -204,8 +222,7 @@ public class UserListCtl extends BaseCtl {
             ServletUtility.forward(getView(), request, response);
 
         } catch (ApplicationException e) {
-
-            e.printStackTrace();
+            log.error("Error in doPost()", e);
             ServletUtility.handleException(e, request, response);
         }
     }

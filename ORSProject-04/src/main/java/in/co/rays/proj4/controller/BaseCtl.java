@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// Log4j 1.2.17 import
+import org.apache.log4j.Logger;
+
 import in.co.rays.proj4.bean.BaseBean;
 import in.co.rays.proj4.bean.UserBean;
 import in.co.rays.proj4.util.DataUtility;
@@ -40,142 +43,136 @@ import in.co.rays.proj4.util.ServletUtility;
  */
 public abstract class BaseCtl extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	// Operation constants
-	public static final String OP_SAVE = "Save";
-	public static final String OP_UPDATE = "Update";
-	public static final String OP_CANCEL = "Cancel";
-	public static final String OP_DELETE = "Delete";
-	public static final String OP_LIST = "List";
-	public static final String OP_SEARCH = "Search";
-	public static final String OP_VIEW = "View";
-	public static final String OP_NEXT = "Next";
-	public static final String OP_PREVIOUS = "Previous";
-	public static final String OP_NEW = "New";
-	public static final String OP_GO = "Go";
-	public static final String OP_BACK = "Back";
-	public static final String OP_RESET = "Reset";
-	public static final String OP_LOG_OUT = "Logout";
+    /**
+     * Log4j logger for BaseCtl.
+     */
+    protected static final Logger log = Logger.getLogger(BaseCtl.class);
 
-	// Message attribute keys
-	public static final String MSG_SUCCESS = "success";
-	public static final String MSG_ERROR = "error";
+    // Operation constants
+    public static final String OP_SAVE = "Save";
+    public static final String OP_UPDATE = "Update";
+    public static final String OP_CANCEL = "Cancel";
+    public static final String OP_DELETE = "Delete";
+    public static final String OP_LIST = "List";
+    public static final String OP_SEARCH = "Search";
+    public static final String OP_VIEW = "View";
+    public static final String OP_NEXT = "Next";
+    public static final String OP_PREVIOUS = "Previous";
+    public static final String OP_NEW = "New";
+    public static final String OP_GO = "Go";
+    public static final String OP_BACK = "Back";
+    public static final String OP_RESET = "Reset";
+    public static final String OP_LOG_OUT = "Logout";
 
-	/**
-	 * Validates input data. To be overridden by child controllers.
-	 *
-	 * @param request HttpServletRequest
-	 * @return true if validation passes, false otherwise
-	 */
-	protected boolean validate(HttpServletRequest request) {
-		return true;
-	}
+    // Message attribute keys
+    public static final String MSG_SUCCESS = "success";
+    public static final String MSG_ERROR = "error";
 
-	/**
-	 * Called before view is loaded. Used for preloading dropdown lists, etc.
-	 *
-	 * @param request HttpServletRequest
-	 */
-	protected void preload(HttpServletRequest request) {
-		// to be overridden in child controllers if needed
-	}
+    /**
+     * Validates input data. To be overridden by child controllers.
+     *
+     * @param request HttpServletRequest
+     * @return true if validation passes, false otherwise
+     */
+    protected boolean validate(HttpServletRequest request) {
+        return true;
+    }
 
-	/**
-	 * Populates a specific bean (DTO) from request parameters.
-	 * Must be implemented in each concrete controller.
-	 *
-	 * @param request HttpServletRequest
-	 * @return populated bean
-	 */
-	protected BaseBean populateBean(HttpServletRequest request) {
-		return null;
-	}
+    /**
+     * Called before view is loaded. Used for preloading dropdown lists, etc.
+     *
+     * @param request HttpServletRequest
+     */
+    protected void preload(HttpServletRequest request) {
+        // to be overridden in child controllers if needed
+    }
 
-	/**
-	 * Populates generic audit fields in DTO such as:
-	 * createdBy, modifiedBy, createdDatetime, modifiedDatetime.
-	 *
-	 * @param dto     BaseBean object
-	 * @param request HttpServletRequest
-	 * @return bean with audit fields populated
-	 */
-	protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
+    /**
+     * Populates a specific bean (DTO) from request parameters.
+     * Must be implemented in each concrete controller.
+     *
+     * @param request HttpServletRequest
+     * @return populated bean
+     */
+    protected BaseBean populateBean(HttpServletRequest request) {
+        return null;
+    }
 
-		String createdBy = request.getParameter("createdBy");
-		String modifiedBy = null;
+    /**
+     * Populates generic audit fields in DTO such as:
+     * createdBy, modifiedBy, createdDatetime, modifiedDatetime.
+     *
+     * @param dto     BaseBean object
+     * @param request HttpServletRequest
+     * @return bean with audit fields populated
+     */
+    protected BaseBean populateDTO(BaseBean dto, HttpServletRequest request) {
 
-		UserBean userbean = (UserBean) request.getSession().getAttribute("user");
+        String createdBy = request.getParameter("createdBy");
+        String modifiedBy = null;
 
-		if (userbean == null) {
-			// If no user in session, assume root user
-			createdBy = "root";
-			modifiedBy = "root";
-		} else {
-			modifiedBy = userbean.getLogin();
-			if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
-				createdBy = modifiedBy;
-			}
-		}
+        UserBean userbean = (UserBean) request.getSession().getAttribute("user");
 
-		dto.setCreatedBy(createdBy);
-		dto.setModifiedBy(modifiedBy);
+        if (userbean == null) {
+            createdBy = "root";
+            modifiedBy = "root";
+        } else {
+            modifiedBy = userbean.getLogin();
+            if ("null".equalsIgnoreCase(createdBy) || DataValidator.isNull(createdBy)) {
+                createdBy = modifiedBy;
+            }
+        }
 
-		long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
+        dto.setCreatedBy(createdBy);
+        dto.setModifiedBy(modifiedBy);
 
-		if (cdt > 0) {
-			dto.setCreatedDatetime(DataUtility.getTimestamp(cdt));
-		} else {
-			dto.setCreatedDatetime(DataUtility.getCurrentTimestamp());
-		}
+        long cdt = DataUtility.getLong(request.getParameter("createdDatetime"));
 
-		dto.setModifiedDatetime(DataUtility.getCurrentTimestamp());
+        if (cdt > 0) {
+            dto.setCreatedDatetime(DataUtility.getTimestamp(cdt));
+        } else {
+            dto.setCreatedDatetime(DataUtility.getCurrentTimestamp());
+        }
 
-		return dto;
-	}
+        dto.setModifiedDatetime(DataUtility.getCurrentTimestamp());
 
-	/**
-	 * Template method that:
-	 * <ol>
-	 *   <li>Calls preload()</li>
-	 *   <li>Reads operation</li>
-	 *   <li>Performs validation (except for Cancel, View, Delete, Reset)</li>
-	 *   <li>If validation fails, forwards back to view</li>
-	 *   <li>Otherwise delegates to child doGet/doPost via super.service()</li>
-	 * </ol>
-	 */
-	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+        return dto;
+    }
 
-		// Preload dropdowns / lists
-		preload(request);
+    /**
+     * Template method that enforces validation before request processing.
+     */
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-		String op = DataUtility.getString(request.getParameter("operation"));
+        preload(request);
 
-		if (DataValidator.isNotNull(op)
-				&& !OP_CANCEL.equalsIgnoreCase(op)
-				&& !OP_VIEW.equalsIgnoreCase(op)
-				&& !OP_DELETE.equalsIgnoreCase(op)
-				&& !OP_RESET.equalsIgnoreCase(op)) {
+        String op = DataUtility.getString(request.getParameter("operation"));
 
-			// If validation fails, send back to view with bean + errors
-			if (!validate(request)) {
-				BaseBean bean = populateBean(request);
-				ServletUtility.setBean(bean, request);
-				ServletUtility.forward(getView(), request, response);
-				return;
-			}
-		}
+        if (DataValidator.isNotNull(op)
+                && !OP_CANCEL.equalsIgnoreCase(op)
+                && !OP_VIEW.equalsIgnoreCase(op)
+                && !OP_DELETE.equalsIgnoreCase(op)
+                && !OP_RESET.equalsIgnoreCase(op)) {
 
-		// Continue with normal servlet flow (doGet/doPost)
-		super.service(request, response);
-	}
+            if (!validate(request)) {
+                BaseBean bean = populateBean(request);
+                ServletUtility.setBean(bean, request);
+                ServletUtility.forward(getView(), request, response);
+                return;
+            }
+        }
 
-	/**
-	 * Returns the view (JSP) path associated with this controller.
-	 *
-	 * @return view path as String
-	 */
-	protected abstract String getView();
+        super.service(request, response);
+    }
+
+    /**
+     * Returns the view (JSP) path associated with this controller.
+     *
+     * @return view path as String
+     */
+    protected abstract String getView();
 }

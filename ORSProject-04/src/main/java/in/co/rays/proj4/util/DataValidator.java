@@ -38,8 +38,29 @@ public class DataValidator {
      *         otherwise {@code false}
      */
     public static boolean isNotNull(String val) {
+    	
         return !isNull(val);
     }
+    /**
+     * Checks whether a String is a valid Double number
+     * 
+     * @param val input String
+     * @return true if valid double, false otherwise
+     */
+    public static boolean isDouble(String val) {
+
+    	if (val == null || val.trim().length() == 0) {
+    		return false;
+    	}
+
+    	try {
+    		Double.parseDouble(val.trim());
+    		return true;
+    	} catch (NumberFormatException e) {
+    		return false;
+    	}
+    }
+
 
     /**
      * Checks if the given String is a valid integer value.
