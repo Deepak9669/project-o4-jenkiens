@@ -92,9 +92,23 @@ public interface ORSView {
 
 	public String PATIENT_VIEW = PAGE_FOLDER + "/PatientView.jsp";
 	public String PATIENT_CTL = APP_CONTEXT + "/ctl/PatientCtl";
+<<<<<<< HEAD
 
 	public String PATIENT_LIST_VIEW = PAGE_FOLDER + "/PatientListView.jsp";
 	public String PATIENT_LIST_CTL = APP_CONTEXT + "/ctl/PatientListCtl";
+=======
+
+	public String PATIENT_LIST_VIEW = PAGE_FOLDER + "/PatientListView.jsp";
+	public String PATIENT_LIST_CTL = APP_CONTEXT+ "/ctl/PatientListCtl";
+	
+	public String DOCTOR_VIEW = PAGE_FOLDER + "/DoctorView.jsp";
+	public String DOCTOR_CTL = APP_CONTEXT + "/ctl/DoctorCtl";
+
+	public String DOCTOR_LIST_VIEW = PAGE_FOLDER + "/DoctorListView.jsp";
+	public String DOCTOR_LIST_CTL = APP_CONTEXT+ "/ctl/DoctorListCtl";
+	
+
+>>>>>>> 3688eb8f39ce8a09dde7a441b05719e5b2706dc5
 
 	public String DOCTOR_VIEW = PAGE_FOLDER + "/DoctorView.jsp";
 	public String DOCTOR_CTL = APP_CONTEXT + "/ctl/DoctorCtl";

@@ -396,4 +396,8 @@ public class DocterModel {
 	    return bean;
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3688eb8f39ce8a09dde7a441b05719e5b2706dc5

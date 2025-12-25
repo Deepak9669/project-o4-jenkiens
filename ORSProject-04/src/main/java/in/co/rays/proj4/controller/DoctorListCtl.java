@@ -215,4 +215,8 @@ public class DoctorListCtl extends BaseCtl {
     protected String getView() {
         return ORSView.DOCTOR_LIST_VIEW;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3688eb8f39ce8a09dde7a441b05719e5b2706dc5

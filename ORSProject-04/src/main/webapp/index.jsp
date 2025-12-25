@@ -31,7 +31,7 @@
 
 	<h1 align="center">
 		<font size="10px" color=""> <a
-			href="<%=ORSView.WELCOME_CTL%>">Online Result System </a></font>
+			href="<%=ORSView.WELCOME_CTL%>">Online Result System 25/12/2025 Merry Christmas</a></font>
 	</h1>
 
 </body>
