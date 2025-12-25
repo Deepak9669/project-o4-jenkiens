@@ -214,4 +214,5 @@ public class DoctorListCtl extends BaseCtl {
     @Override
     protected String getView() {
         return ORSView.DOCTOR_LIST_VIEW;
+        
     }
