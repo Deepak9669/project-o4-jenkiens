@@ -22,13 +22,12 @@
 			scope="request"></jsp:useBean>
 
 		<div align="center">
-<<<<<<< HEAD
+
 			<h1>Login</h1>
-=======
 			<h1>Login </h1>
 
 
->>>>>>> 3688eb8f39ce8a09dde7a441b05719e5b2706dc5
+
 			
 			<div style="height: 15px; margin-bottom: 12px">
 				<H3 align="center">
