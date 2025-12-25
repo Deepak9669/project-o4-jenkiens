@@ -138,3 +138,4 @@ public class DoctorBean extends BaseBean {
         return expertise;
         
     }
+}
