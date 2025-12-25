@@ -396,4 +396,4 @@ public class DocterModel {
 
 	    return bean;
 	}
-
+}
